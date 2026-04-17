@@ -1,11 +1,20 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'pagina_impostazioni.dart';
-import 'colori.dart';
+import 'app_locale.dart';
 import 'app_storage.dart';
+import 'colori.dart';
 import 'notifiche.dart';
+import 'pagina_impostazioni.dart';
+
+class _FrequencyOption {
+  const _FrequencyOption(this.code, this.label);
+
+  final String code;
+  final String label;
+}
 
 class PaginaIniziale extends StatefulWidget {
   const PaginaIniziale({super.key});
@@ -20,21 +29,16 @@ class _PaginaInizialeState extends State<PaginaIniziale>
   late final AnimationController _rainbowController;
   late Animation<Color?> _backgroundColorAnimation;
 
-  final List<String> _frequenze = const [
-    'Ogni 15 minuti',
-    'Ogni 30 minuti',
-    'Ogni 45 minuti',
-    'Ogni 1 ora',
-    'Ogni 2 ore',
-    'Ogni 4 ore',
-    'Ogni 8 ore',
-  ];
+  final List<int> _codeNotifiche = const [20, 30, 40, 50, 60];
 
   double? _costoPacchetto;
   double? _quantitaMedia;
   int? _consumoGiorni;
 
   String? _frequenzaSelezionata;
+  int? _notificheInCodaSelezionate;
+  String? _linguaSelezionata;
+
   Color _coloreSfumatura = const Color.fromARGB(255, 87, 1, 1);
 
   TextStyle get _testoBase => GoogleFonts.exo(
@@ -48,8 +52,6 @@ class _PaginaInizialeState extends State<PaginaIniziale>
   @override
   void initState() {
     super.initState();
-
-    _frequenzaSelezionata = _frequenze.first;
 
     _controller = AnimationController(
       vsync: this,
@@ -75,6 +77,44 @@ class _PaginaInizialeState extends State<PaginaIniziale>
         curve: Curves.easeInOut,
       ),
     );
+  }
+
+  List<_FrequencyOption> _frequencyOptions(AppLocalizations l10n) => [
+        _FrequencyOption('15m', l10n.frequency15),
+        _FrequencyOption('30m', l10n.frequency30),
+        _FrequencyOption('45m', l10n.frequency45),
+        _FrequencyOption('1h', l10n.frequency1h),
+        _FrequencyOption('2h', l10n.frequency2h),
+        _FrequencyOption('4h', l10n.frequency4h),
+        _FrequencyOption('8h', l10n.frequency8h),
+      ];
+
+  String? _normalizeFrequencyCode(String? value) {
+    switch (value) {
+      case '15m':
+      case 'Ogni 15 minuti':
+        return '15m';
+      case '30m':
+      case 'Ogni 30 minuti':
+        return '30m';
+      case '45m':
+      case 'Ogni 45 minuti':
+        return '45m';
+      case '1h':
+      case 'Ogni 1 ora':
+        return '1h';
+      case '2h':
+      case 'Ogni 2 ore':
+        return '2h';
+      case '4h':
+      case 'Ogni 4 ore':
+        return '4h';
+      case '8h':
+      case 'Ogni 8 ore':
+        return '8h';
+      default:
+        return null;
+    }
   }
 
   double? get _spesaGiornaliera {
@@ -128,12 +168,19 @@ class _PaginaInizialeState extends State<PaginaIniziale>
         PaginaImpostazioni(
           coloreSelezionato: _coloreSfumatura,
           opzioniSfumatura: opzioniSfumatura,
-          onColoreChanged: (Color nuovoColore) async {
+          linguaSelezionata: _linguaSelezionata,
+          onColoreChanged: (Color nuovoColore) {
             setState(() {
               _coloreSfumatura = nuovoColore;
               _creaAnimazioneSfondo();
             });
-            await AppStorage.saveGradientColor(nuovoColore);
+            AppStorage.saveGradientColor(nuovoColore);
+          },
+          onLinguaChanged: (String nuovaLingua) {
+            setState(() {
+              _linguaSelezionata = nuovaLingua;
+            });
+            AppLocaleController.setLanguage(nuovaLingua);
           },
         ),
       ),
@@ -145,7 +192,9 @@ class _PaginaInizialeState extends State<PaginaIniziale>
   }
 
   Future<void> _caricaPreferenze() async {
-    final frequenzaSalvata = await AppStorage.loadFrequency();
+    final frequenzaSalvata = _normalizeFrequencyCode(await AppStorage.loadFrequency());
+    final notificheSalvate = await AppStorage.loadNotificationQueue();
+    final linguaSalvata = await AppStorage.loadLanguage();
     final coloreSalvato = await AppStorage.loadGradientColor();
 
     final costoPacchetto = await AppStorage.loadPackPrice();
@@ -155,9 +204,9 @@ class _PaginaInizialeState extends State<PaginaIniziale>
     if (!mounted) return;
 
     setState(() {
-      if (frequenzaSalvata != null && _frequenze.contains(frequenzaSalvata)) {
-        _frequenzaSelezionata = frequenzaSalvata;
-      }
+      _frequenzaSelezionata = frequenzaSalvata;
+      _notificheInCodaSelezionate = notificheSalvate;
+      _linguaSelezionata = linguaSalvata;
 
       if (coloreSalvato != null) {
         _coloreSfumatura = coloreSalvato;
@@ -169,21 +218,147 @@ class _PaginaInizialeState extends State<PaginaIniziale>
       _consumoGiorni = consumoGiorni;
     });
 
-    /* if (_frequenzaSelezionata != null) {
-      await ServizioNotifiche.instance.programmaPromemoria(
-        _frequenzaSelezionata!,
-      );
-    } */
-   await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
+    await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
   }
 
-  Widget _buildRisparmioCard() {
+  Future<void> _salvaEProgrammaNotifiche() async {
+    if (_frequenzaSelezionata == null || _notificheInCodaSelezionate == null) {
+      return;
+    }
+
+    await AppStorage.saveFrequency(_frequenzaSelezionata!);
+    await AppStorage.saveNotificationQueue(_notificheInCodaSelezionate!);
+
+    await ServizioNotifiche.instance.programmaPromemoria(
+      _frequenzaSelezionata!,
+    );
+  }
+
+  Widget _buildDropdownFrequenza(AppLocalizations l10n) {
+    final frequencyOptions = _frequencyOptions(l10n);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.15),
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: _frequenzaSelezionata,
+          isExpanded: true,
+          dropdownColor: Colors.grey.shade900,
+          iconEnabledColor: Colors.white,
+          hint: Text(
+            l10n.selectFrequencyHint,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
+          ),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+          onChanged: (String? nuovoValore) async {
+            if (nuovoValore == null) return;
+
+            setState(() {
+              _frequenzaSelezionata = nuovoValore;
+            });
+
+            await _salvaEProgrammaNotifiche();
+          },
+          items: frequencyOptions
+              .map(
+                (frequenza) => DropdownMenuItem<String>(
+                  value: frequenza.code,
+                  child: Text(frequenza.label),
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownCoda(AppLocalizations l10n) {
+    
+  String labelPerNumero(int numero) {
+    switch (numero) {
+      case 20:
+        return l10n.queue20;
+      case 30:
+        return l10n.queue30;
+      case 40:
+        return l10n.queue40;
+      case 50:
+        return l10n.queue50;
+      case 60:
+        return l10n.queue60;
+      default:
+        return '$numero';
+    }
+  }
+
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    decoration: BoxDecoration(
+      color: Colors.white.withValues(alpha: 0.08),
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(
+        color: Colors.white.withValues(alpha: 0.15),
+      ),
+    ),
+    child: DropdownButtonHideUnderline(
+      child: DropdownButton<int>(
+        value: _notificheInCodaSelezionate,
+        isExpanded: true,
+        dropdownColor: Colors.grey.shade900,
+        iconEnabledColor: Colors.white,
+        hint: Text(
+          l10n.selectQueueHint,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 16,
+          ),
+        ),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+        onChanged: (int? nuovoValore) async {
+          if (nuovoValore == null) return;
+
+          setState(() {
+            _notificheInCodaSelezionate = nuovoValore;
+          });
+
+          await _salvaEProgrammaNotifiche();
+        },
+        items: _codeNotifiche
+            .map(
+              (numero) => DropdownMenuItem<int>(
+                value: numero,
+                child: Text(labelPerNumero(numero)),
+              ),
+            )
+            .toList(),
+      ),
+    ),
+  );
+}
+
+  Widget _buildRisparmioCard(AppLocalizations l10n) {
     final dati = <MapEntry<String, int>>[
-      const MapEntry('30 giorni', 30),
-      const MapEntry('60 giorni', 60),
-      const MapEntry('90 giorni', 90),
-      const MapEntry('6 mesi', 180),
-      const MapEntry('1 anno', 365),
+      MapEntry(l10n.days30, 30),
+      MapEntry(l10n.days60, 60),
+      MapEntry(l10n.days90, 90),
+      MapEntry(l10n.months6, 180),
+      MapEntry(l10n.year1, 365),
     ];
 
     return Container(
@@ -198,7 +373,7 @@ class _PaginaInizialeState extends State<PaginaIniziale>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Risparmio stimato',
+            l10n.savingsEstimatedTitle,
             style: GoogleFonts.exo(
               color: Colors.white,
               fontSize: 18,
@@ -238,6 +413,8 @@ class _PaginaInizialeState extends State<PaginaIniziale>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -278,8 +455,8 @@ class _PaginaInizialeState extends State<PaginaIniziale>
                           text: TextSpan(
                             style: _testoBase,
                             children: [
-                              const TextSpan(
-                                text: 'Imposta la frequenza\ndelle notifiche, per ',
+                              TextSpan(
+                                text: l10n.homeIntroPart1,
                               ),
                               WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
@@ -318,62 +495,23 @@ class _PaginaInizialeState extends State<PaginaIniziale>
                                     );
                                   },
                                   child: Text(
-                                    'SMETTERE',
+                                    l10n.homeIntroSmettere,
                                     style: _testoBase.copyWith(
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
                                 ),
                               ),
-                              const TextSpan(text: ' di fumare'),
+                              TextSpan(text: l10n.homeIntroPart3),
                             ],
                           ),
                         ),
                         const SizedBox(height: 24),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.15),
-                            ),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: _frequenzaSelezionata,
-                              isExpanded: true,
-                              dropdownColor: Colors.grey.shade900,
-                              iconEnabledColor: Colors.white,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                              onChanged: (String? nuovoValore) async {
-                                if (nuovoValore == null) return;
-
-                                setState(() {
-                                  _frequenzaSelezionata = nuovoValore;
-                                });
-
-                                await AppStorage.saveFrequency(nuovoValore);
-                                await ServizioNotifiche.instance.programmaPromemoria(
-                                  nuovoValore,
-                                );
-                              },
-                              items: _frequenze
-                                  .map(
-                                    (frequenza) => DropdownMenuItem<String>(
-                                      value: frequenza,
-                                      child: Text(frequenza),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                        ),
+                        _buildDropdownFrequenza(l10n),
+                        const SizedBox(height: 16),
+                        _buildDropdownCoda(l10n),
                         const SizedBox(height: 24),
-                        if (_spesaGiornaliera != null) _buildRisparmioCard(),
+                        if (_spesaGiornaliera != null) _buildRisparmioCard(l10n),
                       ],
                     ),
                   ),

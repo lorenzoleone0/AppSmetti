@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_storage.dart';
-import 'package:smetti/Pagina_Iniziale.dart';
 
+import 'app_storage.dart';
+import 'Pagina_Iniziale.dart';
 
 class PaginaRisparmio extends StatefulWidget {
-  const PaginaRisparmio({super.key, this.fromFirstLaunch = false,});
+  const PaginaRisparmio({super.key, this.fromFirstLaunch = false});
 
-final bool fromFirstLaunch;
+  final bool fromFirstLaunch;
 
   @override
   State<PaginaRisparmio> createState() => _PaginaRisparmioState();
@@ -25,15 +26,6 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
   int _consumoGiorni = 1;
 
   bool _caricamento = true;
-
-  final List<Map<String, dynamic>> _opzioniConsumo = const [
-    {'label': 'Un giorno', 'days': 1},
-    {'label': 'Due giorni', 'days': 2},
-    {'label': 'Tre giorni', 'days': 3},
-    {'label': 'Quattro giorni', 'days': 4},
-    {'label': 'Cinque giorni', 'days': 5},
-    {'label': 'Una settimana', 'days': 7},
-  ];
 
   @override
   void initState() {
@@ -127,33 +119,33 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
   String _euro(double valore) => '€ ${valore.toStringAsFixed(2)}';
 
   Future<void> _salva() async {
-  if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (!(_formKey.currentState?.validate() ?? false)) return;
 
-  final prezzo = _parseNumero(_prezzoController.text);
-  final consumo = _parseNumero(_consumoController.text);
+    final prezzo = _parseNumero(_prezzoController.text);
+    final consumo = _parseNumero(_consumoController.text);
 
-  if (prezzo == null || consumo == null) return;
+    if (prezzo == null || consumo == null) return;
 
-  await AppStorage.saveSavingsConfig(
-    packPrice: prezzo,
-    averageAmount: consumo,
-    consumptionDays: _consumoGiorni,
-  );
+    await AppStorage.saveSavingsConfig(
+      packPrice: prezzo,
+      averageAmount: consumo,
+      consumptionDays: _consumoGiorni,
+    );
 
-  await AppStorage.setOnboardingCompleted();
+    await AppStorage.setOnboardingCompleted();
 
-if (!mounted) return;
+    if (!mounted) return;
 
-if (widget.fromFirstLaunch) {
-  Navigator.of(context).pushReplacement(
-    MaterialPageRoute(
-      builder: (_) => const PaginaIniziale(),
-    ),
-  );
-} else {
-  Navigator.of(context).pop(true);
-}
-}
+    if (widget.fromFirstLaunch) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const PaginaIniziale(),
+        ),
+      );
+    } else {
+      Navigator.of(context).pop(true);
+    }
+  }
 
   Widget _buildInputCard({
     required String label,
@@ -182,14 +174,16 @@ if (widget.fromFirstLaunch) {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            subtitle,
-            style: GoogleFonts.exo(
-              color: Colors.white70,
-              fontSize: 13,
+          if (subtitle.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              subtitle,
+              style: GoogleFonts.exo(
+                color: Colors.white70,
+                fontSize: 13,
+              ),
             ),
-          ),
+          ],
           const SizedBox(height: 12),
           Row(
             children: [
@@ -202,7 +196,8 @@ if (widget.fromFirstLaunch) {
               Expanded(
                 child: TextFormField(
                   controller: controller,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   textAlign: TextAlign.center,
                   style: GoogleFonts.exo(
                     color: Colors.white,
@@ -278,6 +273,8 @@ if (widget.fromFirstLaunch) {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_caricamento) {
       return const Scaffold(
         backgroundColor: Colors.black,
@@ -293,13 +290,22 @@ if (widget.fromFirstLaunch) {
     final risparmio180 = _risparmioPerGiorni(180);
     final risparmio365 = _risparmioPerGiorni(365);
 
+    final opzioniConsumo = <Map<String, dynamic>>[
+      {'label': l10n.consumptionOption1Day, 'days': 1},
+      {'label': l10n.consumptionOption2Days, 'days': 2},
+      {'label': l10n.consumptionOption3Days, 'days': 3},
+      {'label': l10n.consumptionOption4Days, 'days': 4},
+      {'label': l10n.consumptionOption5Days, 'days': 5},
+      {'label': l10n.consumptionOption1Week, 'days': 7},
+    ];
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         title: Text(
-          'Il tuo risparmio',
+          l10n.savingsPageTitle,
           style: GoogleFonts.exo(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
@@ -327,7 +333,7 @@ if (widget.fromFirstLaunch) {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Inserisci il costo medio del pacchetto e il consumo medio.',
+                    l10n.savingsIntro,
                     style: GoogleFonts.exo(
                       color: Colors.white,
                       fontSize: 15,
@@ -335,9 +341,8 @@ if (widget.fromFirstLaunch) {
                     ),
                   ),
                   const SizedBox(height: 18),
-
                   _buildInputCard(
-                    label: 'Costo medio del pacchetto',
+                    label: l10n.packPriceLabel,
                     subtitle: '',
                     controller: _prezzoController,
                     onMinus: _decrementaPrezzo,
@@ -345,40 +350,40 @@ if (widget.fromFirstLaunch) {
                     validator: (value) {
                       final parsed = _parseNumero(value ?? '');
                       if (parsed == null || parsed <= 0) {
-                        return 'Inserisci un numero valido maggiore di 0';
+                        return l10n.invalidNumberError;
                       }
                       return null;
                     },
                     onChanged: _syncPrezzoDaTesto,
                   ),
                   const SizedBox(height: 16),
-
                   _buildInputCard(
-                    label: 'Consumo medio pacchetto/sigarette',
-                    subtitle: 'Considerando un pacchetto da 20 sigarette,'
-                    '\n1 sigaretta = 0.05 pacchetto'
-                    '\n1.00 = 1 pacchetto',
+                    label: l10n.averageConsumptionLabel,
+                    subtitle: l10n.averageConsumptionSubtitle,
                     controller: _consumoController,
                     onMinus: _decrementaConsumo,
                     onPlus: _incrementaConsumo,
                     validator: (value) {
                       final parsed = _parseNumero(value ?? '');
                       if (parsed == null || parsed <= 0) {
-                        return 'Inserisci un numero valido maggiore di 0';
+                        return l10n.invalidNumberError;
                       }
                       return null;
                     },
                     onChanged: _syncConsumoDaTesto,
                   ),
-
                   const SizedBox(height: 16),
-
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.14),
+                      ),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButtonFormField<int>(
@@ -387,15 +392,17 @@ if (widget.fromFirstLaunch) {
                         iconEnabledColor: Colors.white,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          labelText: 'La quantità media si riferisce a',
-                          labelStyle: GoogleFonts.exo(color: Colors.white70),
+                          labelText: l10n.consumptionReferenceLabel,
+                          labelStyle: GoogleFonts.exo(
+                            color: Colors.white70,
+                          ),
                         ),
                         style: GoogleFonts.exo(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
-                        items: _opzioniConsumo
+                        items: opzioniConsumo
                             .map(
                               (opzione) => DropdownMenuItem<int>(
                                 value: opzione['days'] as int,
@@ -412,21 +419,21 @@ if (widget.fromFirstLaunch) {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.14),
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Risparmio stimato',
+                          l10n.savingsEstimatedTitle,
                           style: GoogleFonts.exo(
                             color: Colors.white,
                             fontSize: 18,
@@ -434,17 +441,15 @@ if (widget.fromFirstLaunch) {
                           ),
                         ),
                         const SizedBox(height: 14),
-                        _buildSavingRow('30 giorni', risparmio30),
-                        _buildSavingRow('60 giorni', risparmio60),
-                        _buildSavingRow('90 giorni', risparmio90),
-                        _buildSavingRow('6 mesi', risparmio180),
-                        _buildSavingRow('1 anno', risparmio365),
+                        _buildSavingRow(l10n.days30, risparmio30),
+                        _buildSavingRow(l10n.days60, risparmio60),
+                        _buildSavingRow(l10n.days90, risparmio90),
+                        _buildSavingRow(l10n.months6, risparmio180),
+                        _buildSavingRow(l10n.year1, risparmio365),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
                   SizedBox(
                     height: 52,
                     child: ElevatedButton(
@@ -460,7 +465,7 @@ if (widget.fromFirstLaunch) {
                           fontSize: 16,
                         ),
                       ),
-                      child: const Text('Salva e continua'),
+                      child: Text(l10n.saveAndContinue),
                     ),
                   ),
                 ],

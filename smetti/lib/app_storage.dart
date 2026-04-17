@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppStorage {
   static const String _keyFrequency = 'pref_frequency';
+  static const String _keyNotificationQueue = 'pref_notification_queue';
   static const String _keyGradientColor = 'pref_gradient_color';
 
   static const String _keyPackPrice = 'pref_pack_price';
@@ -10,16 +11,27 @@ class AppStorage {
   static const String _keyConsumptionDays = 'pref_consumption_days';
   static const String _keyOnboardingCompleted = 'pref_onboarding_completed';
   static const String _keyReminderActive = 'pref_reminder_active';
+  static const String _keyLanguage = 'pref_language';
 
-static Future<void> saveReminderActive(bool value) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setBool(_keyReminderActive, value);
-}
+  static Future<void> saveLanguage(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyLanguage, value);
+  }
 
-static Future<bool> loadReminderActive() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getBool(_keyReminderActive) ?? false;
-}
+  static Future<String?> loadLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyLanguage);
+  }
+
+  static Future<void> saveReminderActive(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyReminderActive, value);
+  }
+
+  static Future<bool> loadReminderActive() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyReminderActive) ?? false;
+  }
 
   static Future<bool> isOnboardingCompleted() async {
     final prefs = await SharedPreferences.getInstance();
@@ -39,6 +51,16 @@ static Future<bool> loadReminderActive() async {
   static Future<String?> loadFrequency() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_keyFrequency);
+  }
+
+  static Future<void> saveNotificationQueue(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keyNotificationQueue, value);
+  }
+
+  static Future<int?> loadNotificationQueue() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_keyNotificationQueue);
   }
 
   static Future<void> saveGradientColor(Color color) async {

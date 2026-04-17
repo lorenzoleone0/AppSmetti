@@ -8,8 +8,9 @@
 //TODO: mettere opzione per togliere limite ottimizzazione batteria, e mettere anche messaggio che dice
 //che se si disattiva l'ottimizzazione batteria, le notifiche funzioneranno meglio, e se si attiva
 //le notifiche potrebbero essere meno affidabili
-//CAPIRE QUINDI SE LE NOTIFICHE POSSONO ESSERE MESSE COME VOGLIO IO E CONTATTARE ASSISTENZA DI QUALCHE
-//TIPO(GOOGLE, FLUTTER)
 
-//TODO: implementare semplicemente la coda delle notifiche magari programmabile,
-//con l'ultima notifica della coda che dice reimposta la frequenza.
+//spagnolo, francese, tedesco, russo, inglese, italiano, e coreano del sud
+
+//aggiungere privacy e policy
+
+//aggiungere easter egg (se me và)
