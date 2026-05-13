@@ -5,8 +5,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
 import 'app_localizations_it.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
 
 // ignore_for_file: type=lint
 
@@ -94,8 +100,14 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fr'),
     Locale('it'),
+    Locale('ko'),
+    Locale('pt'),
+    Locale('ru'),
   ];
 
   /// No description provided for @appTitle.
@@ -206,47 +218,29 @@ abstract class AppLocalizations {
   /// **'Every 2 hours'**
   String get frequency2h;
 
-  /// No description provided for @frequency4h.
+  /// No description provided for @queue1.
   ///
   /// In en, this message translates to:
-  /// **'Every 4 hours'**
-  String get frequency4h;
+  /// **'1 notification'**
+  String get queue1;
 
-  /// No description provided for @frequency8h.
+  /// No description provided for @queue10.
   ///
   /// In en, this message translates to:
-  /// **'Every 8 hours'**
-  String get frequency8h;
+  /// **'10 notifications in queue'**
+  String get queue10;
 
   /// No description provided for @queue20.
   ///
   /// In en, this message translates to:
-  /// **'20 notifications'**
+  /// **'20 notifications in queue'**
   String get queue20;
 
   /// No description provided for @queue30.
   ///
   /// In en, this message translates to:
-  /// **'30 notifications'**
+  /// **'30 notifications in queue'**
   String get queue30;
-
-  /// No description provided for @queue40.
-  ///
-  /// In en, this message translates to:
-  /// **'40 notifications'**
-  String get queue40;
-
-  /// No description provided for @queue50.
-  ///
-  /// In en, this message translates to:
-  /// **'50 notifications'**
-  String get queue50;
-
-  /// No description provided for @queue60.
-  ///
-  /// In en, this message translates to:
-  /// **'60 notifications'**
-  String get queue60;
 
   /// No description provided for @savingsEstimatedTitle.
   ///
@@ -283,6 +277,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1 year'**
   String get year1;
+
+  /// No description provided for @resetNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset notification'**
+  String get resetNotificationTitle;
+
+  /// No description provided for @resetFrequencyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset frequency'**
+  String get resetFrequencyTitle;
 
   /// No description provided for @resetFrequency.
   ///
@@ -407,8 +413,38 @@ abstract class AppLocalizations {
   /// No description provided for @gradientGray.
   ///
   /// In en, this message translates to:
-  /// **'Grigio'**
+  /// **'Gray'**
   String get gradientGray;
+
+  /// No description provided for @optimizationSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Optimize app'**
+  String get optimizationSectionTitle;
+
+  /// No description provided for @exactAlarmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For more reliable app behavior, enable exact alarm handling.'**
+  String get exactAlarmSubtitle;
+
+  /// No description provided for @exactAlarmError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open the exact alarm settings screen on this device.'**
+  String get exactAlarmError;
+
+  /// No description provided for @batteryOptimizationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open the About screen on this device.'**
+  String get batteryOptimizationError;
+
+  /// No description provided for @batteryOptimizationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Also consider turning off battery optimization.'**
+  String get batteryOptimizationSubtitle;
 }
 
 class _AppLocalizationsDelegate
@@ -421,8 +457,16 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'it'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'de',
+    'en',
+    'es',
+    'fr',
+    'it',
+    'ko',
+    'pt',
+    'ru',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -431,10 +475,22 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
     case 'it':
       return AppLocalizationsIt();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
   }
 
   throw FlutterError(

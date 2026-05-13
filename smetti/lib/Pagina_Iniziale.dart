@@ -8,13 +8,7 @@ import 'app_storage.dart';
 import 'colori.dart';
 import 'notifiche.dart';
 import 'pagina_impostazioni.dart';
-
-class _FrequencyOption {
-  const _FrequencyOption(this.code, this.label);
-
-  final String code;
-  final String label;
-}
+import 'widget/widget_pagini.dart';
 
 class PaginaIniziale extends StatefulWidget {
   const PaginaIniziale({super.key});
@@ -24,12 +18,10 @@ class PaginaIniziale extends StatefulWidget {
 }
 
 class _PaginaInizialeState extends State<PaginaIniziale>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late final AnimationController _controller;
   late final AnimationController _rainbowController;
   late Animation<Color?> _backgroundColorAnimation;
-
-  final List<int> _codeNotifiche = const [20, 30, 40, 50, 60];
 
   double? _costoPacchetto;
   double? _quantitaMedia;
@@ -42,16 +34,17 @@ class _PaginaInizialeState extends State<PaginaIniziale>
   Color _coloreSfumatura = const Color.fromARGB(255, 87, 1, 1);
 
   TextStyle get _testoBase => GoogleFonts.exo(
-        color: Colors.white,
-        fontSize: 28,
-        fontWeight: FontWeight.w700,
-        height: 1.2,
-        letterSpacing: 0.4,
-      );
+    color: Colors.white,
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+    letterSpacing: 0.4,
+  );
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     _controller = AnimationController(
       vsync: this,
@@ -71,23 +64,8 @@ class _PaginaInizialeState extends State<PaginaIniziale>
     _backgroundColorAnimation = ColorTween(
       begin: Colors.black,
       end: _coloreSfumatura,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
-
-  List<_FrequencyOption> _frequencyOptions(AppLocalizations l10n) => [
-        _FrequencyOption('15m', l10n.frequency15),
-        _FrequencyOption('30m', l10n.frequency30),
-        _FrequencyOption('45m', l10n.frequency45),
-        _FrequencyOption('1h', l10n.frequency1h),
-        _FrequencyOption('2h', l10n.frequency2h),
-        _FrequencyOption('4h', l10n.frequency4h),
-        _FrequencyOption('8h', l10n.frequency8h),
-      ];
 
   String? _normalizeFrequencyCode(String? value) {
     switch (value) {
@@ -106,12 +84,6 @@ class _PaginaInizialeState extends State<PaginaIniziale>
       case '2h':
       case 'Ogni 2 ore':
         return '2h';
-      case '4h':
-      case 'Ogni 4 ore':
-        return '4h';
-      case '8h':
-      case 'Ogni 8 ore':
-        return '8h';
       default:
         return null;
     }
@@ -137,10 +109,36 @@ class _PaginaInizialeState extends State<PaginaIniziale>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     _rainbowController.dispose();
     super.dispose();
   }
+
+@override
+void didChangeAppLifecycleState(AppLifecycleState state) {
+  if (state == AppLifecycleState.resumed) {
+    _controllaPromemoriaTerminato();
+  }
+}
+
+String _linguaAttivaOS() {
+  const supportate = ['it', 'en', 'es', 'fr', 'de', 'ru', 'pt', 'ko'];
+  final code = AppLocaleController.locale.value.languageCode;
+  return supportate.contains(code) ? code : 'en';
+}
+
+Future<void> _controllaPromemoriaTerminato() async {
+  final resettato =
+      await ServizioNotifiche.instance.resettaPromemoriaSeTerminato();
+
+  if (!mounted || !resettato) return;
+
+  setState(() {
+    _frequenzaSelezionata = null;
+    _notificheInCodaSelezionate = null;
+  });
+}
 
   PageRouteBuilder<bool> _slideDaSinistra(Widget pagina) {
     return PageRouteBuilder<bool>(
@@ -150,14 +148,12 @@ class _PaginaInizialeState extends State<PaginaIniziale>
         const end = Offset.zero;
         const curve = Curves.easeInOut;
 
-        final tween = Tween(begin: begin, end: end).chain(
-          CurveTween(curve: curve),
-        );
+        final tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return SlideTransition(position: animation.drive(tween), child: child);
       },
     );
   }
@@ -176,11 +172,14 @@ class _PaginaInizialeState extends State<PaginaIniziale>
             });
             AppStorage.saveGradientColor(nuovoColore);
           },
-          onLinguaChanged: (String nuovaLingua) {
+          onLinguaChanged: (String nuovaLingua) async {
             setState(() {
               _linguaSelezionata = nuovaLingua;
             });
-            AppLocaleController.setLanguage(nuovaLingua);
+
+            await AppLocaleController.setLanguage(nuovaLingua);
+            await ServizioNotifiche.instance
+                .aggiornaNotificheDopoCambioLingua();
           },
         ),
       ),
@@ -192,34 +191,46 @@ class _PaginaInizialeState extends State<PaginaIniziale>
   }
 
   Future<void> _caricaPreferenze() async {
-    final frequenzaSalvata = _normalizeFrequencyCode(await AppStorage.loadFrequency());
-    final notificheSalvate = await AppStorage.loadNotificationQueue();
-    final linguaSalvata = await AppStorage.loadLanguage();
-    final coloreSalvato = await AppStorage.loadGradientColor();
+  final frequenzaSalvata = _normalizeFrequencyCode(
+    await AppStorage.loadFrequency(),
+  );
+  
+  final notificheSalvate = await AppStorage.loadNotificationQueue();
+  final linguaSalvata = await AppStorage.loadLanguage();
+  final coloreSalvato = await AppStorage.loadGradientColor();
 
-    final costoPacchetto = await AppStorage.loadPackPrice();
-    final quantitaMedia = await AppStorage.loadAverageAmount();
-    final consumoGiorni = await AppStorage.loadConsumptionDays();
+  final costoPacchetto = await AppStorage.loadPackPrice();
+  final quantitaMedia = await AppStorage.loadAverageAmount();
+  final consumoGiorni = await AppStorage.loadConsumptionDays();
 
-    if (!mounted) return;
+  if (!mounted) return;
 
-    setState(() {
-      _frequenzaSelezionata = frequenzaSalvata;
-      _notificheInCodaSelezionate = notificheSalvate;
-      _linguaSelezionata = linguaSalvata;
+  final linguaDaMostrare = linguaSalvata ??
+      _linguaAttivaOS();
 
-      if (coloreSalvato != null) {
-        _coloreSfumatura = coloreSalvato;
-        _creaAnimazioneSfondo();
-      }
+  setState(() {
+    _frequenzaSelezionata = frequenzaSalvata;
+    _notificheInCodaSelezionate = notificheSalvate;
+    _linguaSelezionata = linguaSalvata;
 
-      _costoPacchetto = costoPacchetto;
-      _quantitaMedia = quantitaMedia;
-      _consumoGiorni = consumoGiorni;
-    });
+    if (coloreSalvato != null) {
+      _coloreSfumatura = coloreSalvato;
+      _creaAnimazioneSfondo();
+    }
 
-    await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
+    _costoPacchetto = costoPacchetto;
+    _quantitaMedia = quantitaMedia;
+    _consumoGiorni = consumoGiorni;
+  });
+
+if (linguaSalvata == null) {
+    await AppStorage.saveLanguage(linguaDaMostrare);
+    await AppLocaleController.setLanguage(linguaDaMostrare);
   }
+
+  await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
+  await _controllaPromemoriaTerminato();
+}
 
   Future<void> _salvaEProgrammaNotifiche() async {
     if (_frequenzaSelezionata == null || _notificheInCodaSelezionate == null) {
@@ -231,183 +242,6 @@ class _PaginaInizialeState extends State<PaginaIniziale>
 
     await ServizioNotifiche.instance.programmaPromemoria(
       _frequenzaSelezionata!,
-    );
-  }
-
-  Widget _buildDropdownFrequenza(AppLocalizations l10n) {
-    final frequencyOptions = _frequencyOptions(l10n);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.15),
-        ),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: _frequenzaSelezionata,
-          isExpanded: true,
-          dropdownColor: Colors.grey.shade900,
-          iconEnabledColor: Colors.white,
-          hint: Text(
-            l10n.selectFrequencyHint,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-            ),
-          ),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-          onChanged: (String? nuovoValore) async {
-            if (nuovoValore == null) return;
-
-            setState(() {
-              _frequenzaSelezionata = nuovoValore;
-            });
-
-            await _salvaEProgrammaNotifiche();
-          },
-          items: frequencyOptions
-              .map(
-                (frequenza) => DropdownMenuItem<String>(
-                  value: frequenza.code,
-                  child: Text(frequenza.label),
-                ),
-              )
-              .toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdownCoda(AppLocalizations l10n) {
-    
-  String labelPerNumero(int numero) {
-    switch (numero) {
-      case 20:
-        return l10n.queue20;
-      case 30:
-        return l10n.queue30;
-      case 40:
-        return l10n.queue40;
-      case 50:
-        return l10n.queue50;
-      case 60:
-        return l10n.queue60;
-      default:
-        return '$numero';
-    }
-  }
-
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: 0.08),
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(
-        color: Colors.white.withValues(alpha: 0.15),
-      ),
-    ),
-    child: DropdownButtonHideUnderline(
-      child: DropdownButton<int>(
-        value: _notificheInCodaSelezionate,
-        isExpanded: true,
-        dropdownColor: Colors.grey.shade900,
-        iconEnabledColor: Colors.white,
-        hint: Text(
-          l10n.selectQueueHint,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-          ),
-        ),
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-        ),
-        onChanged: (int? nuovoValore) async {
-          if (nuovoValore == null) return;
-
-          setState(() {
-            _notificheInCodaSelezionate = nuovoValore;
-          });
-
-          await _salvaEProgrammaNotifiche();
-        },
-        items: _codeNotifiche
-            .map(
-              (numero) => DropdownMenuItem<int>(
-                value: numero,
-                child: Text(labelPerNumero(numero)),
-              ),
-            )
-            .toList(),
-      ),
-    ),
-  );
-}
-
-  Widget _buildRisparmioCard(AppLocalizations l10n) {
-    final dati = <MapEntry<String, int>>[
-      MapEntry(l10n.days30, 30),
-      MapEntry(l10n.days60, 60),
-      MapEntry(l10n.days90, 90),
-      MapEntry(l10n.months6, 180),
-      MapEntry(l10n.year1, 365),
-    ];
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.savingsEstimatedTitle,
-            style: GoogleFonts.exo(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 14),
-          ...dati.map(
-            (item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Row(
-                children: [
-                  Text(
-                    item.key,
-                    style: GoogleFonts.exo(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    _euro(_risparmioPer(item.value)),
-                    style: GoogleFonts.exo(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -455,9 +289,7 @@ class _PaginaInizialeState extends State<PaginaIniziale>
                           text: TextSpan(
                             style: _testoBase,
                             children: [
-                              TextSpan(
-                                text: l10n.homeIntroPart1,
-                              ),
+                              TextSpan(text: l10n.homeIntroPart1),
                               WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
                                 child: AnimatedBuilder(
@@ -487,7 +319,9 @@ class _PaginaInizialeState extends State<PaginaIniziale>
                                             1.0,
                                           ],
                                           transform: GradientRotation(
-                                            _rainbowController.value * 2 * math.pi,
+                                            _rainbowController.value *
+                                                2 *
+                                                math.pi,
                                           ),
                                         ).createShader(bounds);
                                       },
@@ -507,11 +341,35 @@ class _PaginaInizialeState extends State<PaginaIniziale>
                           ),
                         ),
                         const SizedBox(height: 24),
-                        _buildDropdownFrequenza(l10n),
+                        WidgetPagine.buildDropdownFrequenza(
+                          l10n: l10n,
+                          frequenzaSelezionata: _frequenzaSelezionata,
+                          onChanged: (nuovoValore) async {
+                            setState(() {
+                              _frequenzaSelezionata = nuovoValore;
+                            });
+                            await _salvaEProgrammaNotifiche();
+                          },
+                        ),
                         const SizedBox(height: 16),
-                        _buildDropdownCoda(l10n),
+                        WidgetPagine.buildDropdownCoda(
+                          l10n: l10n,
+                          notificheInCodaSelezionate:
+                              _notificheInCodaSelezionate,
+                          onChanged: (nuovoValore) async {
+                            setState(() {
+                              _notificheInCodaSelezionate = nuovoValore;
+                            });
+                            await _salvaEProgrammaNotifiche();
+                          },
+                        ),
                         const SizedBox(height: 24),
-                        if (_spesaGiornaliera != null) _buildRisparmioCard(l10n),
+                        if (_spesaGiornaliera != null)
+                          WidgetPagine.buildRisparmioCard(
+                            l10n: l10n,
+                            risparmioPer: _risparmioPer,
+                            euro: _euro,
+                          ),
                       ],
                     ),
                   ),

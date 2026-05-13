@@ -13,24 +13,29 @@
   "homeIntroPart3": " smoking",
   "selectFrequencyHint": "Select frequency",
   "selectQueueHint": "Select queue size",
+  
   "frequency15": "Every 15 minutes",
   "frequency30": "Every 30 minutes",
   "frequency45": "Every 45 minutes",
   "frequency1h": "Every 1 hour",
   "frequency2h": "Every 2 hours",
-  "frequency4h": "Every 4 hours",
-  "frequency8h": "Every 8 hours",
-  "queue20": "20 notifications",
-  "queue30": "30 notifications",
-  "queue40": "40 notifications",
-  "queue50": "50 notifications",
-  "queue60": "60 notifications",
+ 
+  "queue1": "1 notification",
+  "queue10": "10 notifications in queue",
+  "queue20": "20 notifications in queue",
+  "queue30": "30 notifications in queue",
+  
+
   "savingsEstimatedTitle": "Estimated savings",
   "days30": "30 days",
   "days60": "60 days",
   "days90": "90 days",
   "months6": "6 months",
   "year1": "1 year",
+
+  "resetNotificationTitle": "Reset notification",
+  "resetFrequencyTitle": "Reset frequency",
+
   "resetFrequency": "Reset the frequency",
   "savingsPageTitle": "Your savings",
   "savingsIntro": "Enter the average pack price and your average consumption.",
@@ -40,22 +45,31 @@
   "consumptionReferenceLabel": "The average quantity refers to",
   "invalidNumberError": "Enter a valid number greater than 0",
   "savingsEstimatedTitle": "Estimated savings",
+
   "days30": "30 days",
   "days60": "60 days",
   "days90": "90 days",
   "months6": "6 months",
   "year1": "1 year",
   "saveAndContinue": "Save and continue",
+
   "consumptionOption1Day": "One day",
   "consumptionOption2Days": "Two days",
   "consumptionOption3Days": "Three days",
   "consumptionOption4Days": "Four days",
   "consumptionOption5Days": "Five days",
   "consumptionOption1Week": "One week",
+
   "gradientRed": "Red",
   "gradientBlue": "Blue",
   "gradientGreen": "Green",
   "gradientPurple": "Purple",
   "gradientOrange": "Orange",
-  "gradientGray": "Grigio"
+  "gradientGray": "Gray",
+
+  "optimizationSectionTitle": "Optimize app",
+  "exactAlarmSubtitle": "For more reliable app behavior, enable exact alarm handling.",
+  "exactAlarmError": "Unable to open the exact alarm settings screen on this device.",
+  "batteryOptimizationError": "Unable to open the About screen on this device.",
+  "batteryOptimizationSubtitle": "Also consider turning off battery optimization."
 }

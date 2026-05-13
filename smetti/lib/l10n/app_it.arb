@@ -13,24 +13,28 @@
   "homeIntroPart3": " di fumare",
   "selectFrequencyHint": "Seleziona frequenza",
   "selectQueueHint": "Seleziona quantità coda",
+  
   "frequency15": "Ogni 15 minuti",
   "frequency30": "Ogni 30 minuti",
   "frequency45": "Ogni 45 minuti",
   "frequency1h": "Ogni 1 ora",
   "frequency2h": "Ogni 2 ore",
-  "frequency4h": "Ogni 4 ore",
-  "frequency8h": "Ogni 8 ore",
-  "queue20": "20 notifiche",
-  "queue30": "30 notifiche",
-  "queue40": "40 notifiche",
-  "queue50": "50 notifiche",
-  "queue60": "60 notifiche",
+  
+  "queue1": "1 notifica",
+  "queue10": "10 notifiche in coda",
+  "queue20": "20 notifiche in coda",
+  "queue30": "30 notifiche in coda",
+
   "savingsEstimatedTitle": "Risparmio stimato",
   "days30": "30 giorni",
   "days60": "60 giorni",
   "days90": "90 giorni",
   "months6": "6 mesi",
   "year1": "1 anno",
+
+  "resetNotificationTitle": "Reimposta notifica",
+  "resetFrequencyTitle": "Reimposta frequenza",
+  
   "resetFrequency": "Reimposta la frequenza",
   "savingsPageTitle": "Il tuo risparmio",
   "savingsIntro": "Inserisci il costo medio del pacchetto e il consumo medio.",
@@ -40,22 +44,31 @@
   "consumptionReferenceLabel": "La quantità media si riferisce a",
   "invalidNumberError": "Inserisci un numero valido maggiore di 0",
   "savingsEstimatedTitle": "Risparmio stimato",
+
   "days30": "30 giorni",
   "days60": "60 giorni",
   "days90": "90 giorni",
   "months6": "6 mesi",
   "year1": "1 anno",
   "saveAndContinue": "Salva e continua",
+
   "consumptionOption1Day": "Un giorno",
   "consumptionOption2Days": "Due giorni",
   "consumptionOption3Days": "Tre giorni",
   "consumptionOption4Days": "Quattro giorni",
   "consumptionOption5Days": "Cinque giorni",
   "consumptionOption1Week": "Una settimana",
+
   "gradientRed": "Rosso",
   "gradientBlue": "Blu",
   "gradientGreen": "Verde",
   "gradientPurple": "Viola",
   "gradientOrange": "Arancione",
-  "gradientGray": "Grigio"
+  "gradientGray": "Grigio",
+
+  "optimizationSectionTitle": "Ottimizza applicazione",
+  "exactAlarmSubtitle": "Per un funzionamento più affidabile dell'app, attiva la gestione degli allarmi esatti.",
+  "exactAlarmError": "Impossibile aprire la schermata degli allarmi esatti su questo dispositivo.",
+  "batteryOptimizationError": "Impossibile aprire la schermata delle informazioni su questo dispositivo.",
+  "batteryOptimizationSubtitle": "Considera anche di togliere l'ottimizzazione della batteria."
 }

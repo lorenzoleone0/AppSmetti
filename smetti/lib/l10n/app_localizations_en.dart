@@ -63,25 +63,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get frequency2h => 'Every 2 hours';
 
   @override
-  String get frequency4h => 'Every 4 hours';
+  String get queue1 => '1 notification';
 
   @override
-  String get frequency8h => 'Every 8 hours';
+  String get queue10 => '10 notifications in queue';
 
   @override
-  String get queue20 => '20 notifications';
+  String get queue20 => '20 notifications in queue';
 
   @override
-  String get queue30 => '30 notifications';
-
-  @override
-  String get queue40 => '40 notifications';
-
-  @override
-  String get queue50 => '50 notifications';
-
-  @override
-  String get queue60 => '60 notifications';
+  String get queue30 => '30 notifications in queue';
 
   @override
   String get savingsEstimatedTitle => 'Estimated savings';
@@ -100,6 +91,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get year1 => '1 year';
+
+  @override
+  String get resetNotificationTitle => 'Reset notification';
+
+  @override
+  String get resetFrequencyTitle => 'Reset frequency';
 
   @override
   String get resetFrequency => 'Reset the frequency';
@@ -164,5 +161,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gradientOrange => 'Orange';
 
   @override
-  String get gradientGray => 'Grigio';
+  String get gradientGray => 'Gray';
+
+  @override
+  String get optimizationSectionTitle => 'Optimize app';
+
+  @override
+  String get exactAlarmSubtitle =>
+      'For more reliable app behavior, enable exact alarm handling.';
+
+  @override
+  String get exactAlarmError =>
+      'Unable to open the exact alarm settings screen on this device.';
+
+  @override
+  String get batteryOptimizationError =>
+      'Unable to open the About screen on this device.';
+
+  @override
+  String get batteryOptimizationSubtitle =>
+      'Also consider turning off battery optimization.';
 }

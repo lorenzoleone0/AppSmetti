@@ -12,11 +12,32 @@ class AppStorage {
   static const String _keyOnboardingCompleted = 'pref_onboarding_completed';
   static const String _keyReminderActive = 'pref_reminder_active';
   static const String _keyLanguage = 'pref_language';
+  static const String _keyReminderEndAt = 'pref_reminder_end_at';
+
+  static Future<void> saveReminderEndAt(DateTime value) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString(_keyReminderEndAt, value.toIso8601String());
+}
+
+static Future<DateTime?> loadReminderEndAt() async {
+  final prefs = await SharedPreferences.getInstance();
+  final value = prefs.getString(_keyReminderEndAt);
+  return value == null ? null : DateTime.tryParse(value);
+}
+
+static Future<void> clearReminderPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove(_keyFrequency);
+  await prefs.remove(_keyNotificationQueue);
+  await prefs.remove(_keyReminderEndAt);
+  await prefs.setBool(_keyReminderActive, false);
+}
 
   static Future<void> saveLanguage(String value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyLanguage, value);
   }
+
 
   static Future<String?> loadLanguage() async {
     final prefs = await SharedPreferences.getInstance();

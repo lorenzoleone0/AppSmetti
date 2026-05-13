@@ -64,25 +64,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get frequency2h => 'Ogni 2 ore';
 
   @override
-  String get frequency4h => 'Ogni 4 ore';
+  String get queue1 => '1 notifica';
 
   @override
-  String get frequency8h => 'Ogni 8 ore';
+  String get queue10 => '10 notifiche in coda';
 
   @override
-  String get queue20 => '20 notifiche';
+  String get queue20 => '20 notifiche in coda';
 
   @override
-  String get queue30 => '30 notifiche';
-
-  @override
-  String get queue40 => '40 notifiche';
-
-  @override
-  String get queue50 => '50 notifiche';
-
-  @override
-  String get queue60 => '60 notifiche';
+  String get queue30 => '30 notifiche in coda';
 
   @override
   String get savingsEstimatedTitle => 'Risparmio stimato';
@@ -101,6 +92,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get year1 => '1 anno';
+
+  @override
+  String get resetNotificationTitle => 'Reimposta notifica';
+
+  @override
+  String get resetFrequencyTitle => 'Reimposta frequenza';
 
   @override
   String get resetFrequency => 'Reimposta la frequenza';
@@ -166,4 +163,23 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get gradientGray => 'Grigio';
+
+  @override
+  String get optimizationSectionTitle => 'Ottimizza applicazione';
+
+  @override
+  String get exactAlarmSubtitle =>
+      'Per un funzionamento più affidabile dell\'app, attiva la gestione degli allarmi esatti.';
+
+  @override
+  String get exactAlarmError =>
+      'Impossibile aprire la schermata degli allarmi esatti su questo dispositivo.';
+
+  @override
+  String get batteryOptimizationError =>
+      'Impossibile aprire la schermata delle informazioni su questo dispositivo.';
+
+  @override
+  String get batteryOptimizationSubtitle =>
+      'Considera anche di togliere l\'ottimizzazione della batteria.';
 }

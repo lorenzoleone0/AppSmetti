@@ -1,30 +1,47 @@
 import 'package:flutter/material.dart';
-import 'app_storage.dart';
 import 'dart:ui';
+import 'app_storage.dart';
 
 class AppLocaleController {
-  // 1. Inizializza con la lingua del sistema invece che 'en'
+  static const List<String> _supportate = [
+    'it',
+    'en',
+    'es',
+    'fr',
+    'de',
+    'ru',
+    'zh',
+    'ko',
+  ];
+
+  static String _normalizza(String code) {
+    return _supportate.contains(code) ? code : 'en';
+  }
+
   static final ValueNotifier<Locale> locale =
-      ValueNotifier<Locale>(Locale(PlatformDispatcher.instance.locale.languageCode));
+      ValueNotifier<Locale>(Locale(_normalizza(PlatformDispatcher.instance.locale.languageCode)));
 
   static Future<void> loadSavedLocale() async {
     final saved = await AppStorage.loadLanguage();
-    
-    // 2. Se non c'è nulla di salvato, NON forzare 'en'
+
     if (saved == null || saved.isEmpty) {
-      // Prendi la lingua del dispositivo
-      String sistema = PlatformDispatcher.instance.locale.languageCode;
-      
-      // Opzionale: se il telefono è in una lingua che non hai (es. Tedesco), 
-      // Flutter userà comunque l'inglese grazie ai 'supportedLocales' nel main.
+      final sistema = _normalizza(PlatformDispatcher.instance.locale.languageCode);
       locale.value = Locale(sistema);
+      await AppStorage.saveLanguage(sistema);
       return;
     }
-    locale.value = Locale(saved);
+
+    final normalizzata = _normalizza(saved);
+    locale.value = Locale(normalizzata);
+
+    if (normalizzata != saved) {
+      await AppStorage.saveLanguage(normalizzata);
+    }
   }
 
   static Future<void> setLanguage(String languageCode) async {
-    locale.value = Locale(languageCode);
-    await AppStorage.saveLanguage(languageCode);
+    final normalizzata = _normalizza(languageCode);
+    locale.value = Locale(normalizzata);
+    await AppStorage.saveLanguage(normalizzata);
   }
 }

@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 import 'l10n/app_localizations.dart';
 import 'package:smetti/Pagina_Iniziale.dart';
 import 'package:smetti/Pagina_Risparmio.dart';
 import 'package:smetti/notifiche.dart';
 import 'package:smetti/app_storage.dart';
 import 'package:smetti/app_locale.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   tz.initializeTimeZones();
+
+  try {
+  final currentTimeZone = await FlutterTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(currentTimeZone.identifier));
+} catch (e) {
   tz.setLocalLocation(tz.getLocation('Europe/Rome'));
+}
+
+  await AppLocaleController.loadSavedLocale();
 
   await ServizioNotifiche.instance.init();
   await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
-
-  await AppLocaleController.loadSavedLocale();
+  await ServizioNotifiche.instance.resettaPromemoriaSeTerminato();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

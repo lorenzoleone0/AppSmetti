@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'widget/widget_notilingue.dart';
 
 import 'app_storage.dart';
 
@@ -65,109 +67,68 @@ class ServizioNotifiche {
       case '2h':
       case 'Ogni 2 ore':
         return const Duration(hours: 2);
-      case '4h':
-      case 'Ogni 4 ore':
-        return const Duration(hours: 4);
-      case '8h':
-      case 'Ogni 8 ore':
-        return const Duration(hours: 8);
       default:
         return null;
     }
   }
+//-----------------------------------
+Future<bool> _puoSchedulareExactAlarm() async {
+  final android = _plugin.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>();
 
-  List<String> _frasiPerLingua(String? code) {
-    switch (code) {
-      case 'it':
-        return const [
-          'Smetti ora.',
-          'Ogni sigaretta in meno conta.',
-          'Respira, non fumare.',
-          'Stai facendo una scelta migliore.',
-          'Il tuo obiettivo è più forte dell’abitudine.',
-        ];
-      case 'es':
-        return const [
-          'Deja de fumar ahora.',
-          'Cada cigarrillo menos cuenta.',
-          'Respira, no fumes.',
-          'Estás tomando una mejor decisión.',
-          'Tu objetivo es más fuerte que el hábito.',
-        ];
-      case 'fr':
-        return const [
-          'Arrête maintenant.',
-          'Chaque cigarette en moins compte.',
-          'Respire, ne fume pas.',
-          'Tu fais un meilleur choix.',
-          'Ton objectif est plus fort que l’habitude.',
-        ];
-      case 'de':
-        return const [
-          'Hör jetzt auf.',
-          'Jede Zigarette weniger zählt.',
-          'Atme, rauche nicht.',
-          'Du triffst eine bessere Wahl.',
-          'Dein Ziel ist stärker als die Gewohnheit.',
-        ];
-      case 'ru':
-        return const [
-          'Остановись сейчас.',
-          'Каждая сигарета меньше имеет значение.',
-          'Дыши, не кури.',
-          'Ты делаешь лучший выбор.',
-          'Твоя цель сильнее привычки.',
-        ];
-      case 'zh':
-        return const [
-          '现在就停止。',
-          '少抽一支也很重要。',
-          '呼吸，不要吸烟。',
-          '你正在做出更好的选择。',
-          '你的目标比习惯更强大。',
-        ];
-      case 'ko':
-        return const [
-          '지금 멈추세요.',
-          '담배 한 개비라도 줄이면 의미가 있습니다.',
-          '숨을 쉬고, 담배를 피우지 마세요.',
-          '더 나은 선택을 하고 있습니다.',
-          '목표가 습관보다 더 강합니다.',
-        ];
-      default:
-        return const [
-          'Stop now.',
-          'Every cigarette less counts.',
-          'Breathe, do not smoke.',
-          'You are making a better choice.',
-          'Your goal is stronger than the habit.',
-        ];
-    }
-  }
+  if (android == null) return true;
 
-  String _fraseReimposta(String? code) {
-    switch (code) {
-      case 'it':
-        return 'Ripristina la frequenza';
-      case 'es':
-        return 'Reconfigura la frecuencia';
-      case 'fr':
-        return 'Réinitialise la fréquence';
-      case 'de':
-        return 'Frequenz neu einstellen';
-      case 'ru':
-        return 'Сбросьте частоту';
-      case 'zh':
-        return '重新设置频率';
-      case 'ko':
-        return '빈도를 다시 설정하세요';
-      default:
-        return 'Reset the frequency';
-    }
-  }
+  final canSchedule = await android.canScheduleExactNotifications();
+  return canSchedule ?? false;
+}
+
+Future<bool> _richiediExactAlarm() async {
+  final android = _plugin.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>();
+
+  if (android == null) return true;
+
+  final granted = await android.requestExactAlarmsPermission();
+  return granted ?? false;
+}
+
+Future<bool> _assicuratiPermessoExactAlarm() async {
+  await init();
+
+  final puo = await _puoSchedulareExactAlarm();
+  if (puo) return true;
+
+  final richiesto = await _richiediExactAlarm();
+  return richiesto;
+}
+//-----------------------------------
+Future<bool> resettaPromemoriaSeTerminato() async {
+  await init();
+
+  final attivo = await AppStorage.loadReminderActive();
+  if (!attivo) return false;
+
+  final finePromemoria = await AppStorage.loadReminderEndAt();
+  final pending = await _plugin.pendingNotificationRequests();
+
+  final adesso = DateTime.now();
+  final scaduto = finePromemoria != null && adesso.isAfter(finePromemoria);
+
+  if (pending.isNotEmpty && !scaduto) return false;
+
+  _promemoriaAttivo = false;
+  _durataAttiva = null;
+  _totaleNotifiche = null;
+  _ultimaFrase = null;
+  _linguaAttiva = null;
+
+  await AppStorage.clearReminderPreferences();
+  await _plugin.cancelAll();
+  return true;
+}
 
   String fraseCasuale() {
-    final frasi = _frasiPerLingua(_linguaAttiva);
+    final frasi = frasiPerLingua(_linguaAttiva);
     final disponibili = frasi.where((frase) => frase != _ultimaFrase).toList();
 
     final scelta = disponibili.isNotEmpty
@@ -180,74 +141,167 @@ class ServizioNotifiche {
 
   Future<void> _caricaLinguaAttiva() async {
     _linguaAttiva = await AppStorage.loadLanguage();
+    _linguaAttiva ??=
+        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
   }
 
   Future<void> programmaPromemoria(String frequenza) async {
-    final durata = durataDaFrequenza(frequenza);
-    if (durata == null) return;
+  print('programmaPromemoria chiamato con frequenza: $frequenza');
 
-    final totaleNotifiche = await AppStorage.loadNotificationQueue();
-    if (totaleNotifiche == null || totaleNotifiche <= 0) return;
+  final durata = durataDaFrequenza(frequenza);
+  print('Durata calcolata: $durata');
 
-    await init();
-    await _caricaLinguaAttiva();
-
-    _promemoriaAttivo = true;
-    _durataAttiva = durata;
-    _totaleNotifiche = totaleNotifiche;
-    _ultimaFrase = null;
-
-    await AppStorage.saveReminderActive(true);
-
-    await _plugin.cancelAll();
-    await _programmaSerieNotifiche();
+  if (durata == null) {
+    print('Durata null, esco');
+    return;
   }
 
+  final totaleNotifiche = await AppStorage.loadNotificationQueue();
+  print('Totale notifiche caricate: $totaleNotifiche');
+
+  if (totaleNotifiche == null || totaleNotifiche <= 0) {
+    print('Totale notifiche non valido, esco');
+    return;
+  }
+
+  await init();
+  await _caricaLinguaAttiva();
+//-----------------------------------
+final permessoOk = await _assicuratiPermessoExactAlarm();
+if (!permessoOk) {
+  print('Permesso exact alarm non concesso');
+  return;
+}
+//-----------------------------------
+  print('Lingua attiva notifiche: $_linguaAttiva');
+
+  _promemoriaAttivo = true;
+  _durataAttiva = durata;
+  _totaleNotifiche = totaleNotifiche;
+  _ultimaFrase = null;
+
+  final finePromemoria = DateTime.now().add(durata * totaleNotifiche);
+  print('Fine promemoria prevista: $finePromemoria');
+  await AppStorage.saveReminderEndAt(finePromemoria);
+
+  await AppStorage.saveReminderActive(true);
+
+  await _plugin.cancelAll();
+  print('Notifiche cancellate, avvio nuova programmazione');
+
+  await _programmaSerieNotifiche();
+}
+
   Future<void> sincronizzaPromemoriaAllAvvio() async {
+print('sincronizzaPromemoriaAllAvvio chiamato');
+
     await init();
 
     final attivo = await AppStorage.loadReminderActive();
+print('Reminder attivo: $attivo');
+
     if (!attivo) return;
 
     final frequenza = await AppStorage.loadFrequency();
+print('Frequenza salvata: $frequenza');
+
     final durata = frequenza != null ? durataDaFrequenza(frequenza) : null;
+print('Durata calcolata: $durata');
+
     if (durata == null) return;
 
     final totaleNotifiche = await AppStorage.loadNotificationQueue();
+print('Totale notifiche salvate: $totaleNotifiche');
+
     if (totaleNotifiche == null || totaleNotifiche <= 0) return;
 
     await _caricaLinguaAttiva();
+print('Lingua attiva all’avvio: $_linguaAttiva');
 
     _promemoriaAttivo = true;
     _durataAttiva = durata;
     _totaleNotifiche = totaleNotifiche;
 
     final pending = await _plugin.pendingNotificationRequests();
-
+    print('Notifiche pending trovate: ${pending.length}');
+//-------------------------------
+final permessoOk = await _assicuratiPermessoExactAlarm();
+if (!permessoOk) return;
+//-------------------------------
     if (pending.isEmpty) {
+      print('Nessuna notifica pending, riprogrammo tutto');
       await _programmaSerieNotifiche();
     }
   }
 
+  Future<void> aggiornaNotificheDopoCambioLingua() async {
+    final attivo = await AppStorage.loadReminderActive();
+    await _caricaLinguaAttiva();
+
+    if (!attivo) return;
+
+    final frequenza = await AppStorage.loadFrequency();
+    final durata = frequenza != null ? durataDaFrequenza(frequenza) : null;
+    final totaleNotifiche = await AppStorage.loadNotificationQueue();
+
+    if (durata == null || totaleNotifiche == null || totaleNotifiche <= 0) {
+      return;
+    }
+
+    await init();
+
+    _promemoriaAttivo = true;
+    _durataAttiva = durata;
+    _totaleNotifiche = totaleNotifiche;
+    _ultimaFrase = null;
+
+    await _plugin.cancelAll();
+    await _programmaSerieNotifiche();
+  }
+
+
   Future<void> _programmaSerieNotifiche() async {
+print('_programmaSerieNotifiche chiamato');
+  print('Attivo: $_promemoriaAttivo');
+  print('Durata: $_durataAttiva');
+  print('Totale notifiche: $_totaleNotifiche');
+
     if (!_promemoriaAttivo ||
         _durataAttiva == null ||
         _totaleNotifiche == null) {
+          print('Condizioni non valide, esco');
       return;
     }
 
     final oraInizio = tz.TZDateTime.now(tz.local);
+print('Ora inizio: $oraInizio');
 
     for (int i = 1; i <= _totaleNotifiche!; i++) {
       final scheduledDate = oraInizio.add(_durataAttiva! * i);
 
-      final body = i == _totaleNotifiche!
-          ? _fraseReimposta(_linguaAttiva)
-          : fraseCasuale();
+      final isUltima = i == _totaleNotifiche!;
+    final isSingola = _totaleNotifiche == 1;
 
+     final body = isSingola
+        ? fraseCasuale()
+        : isUltima
+            ? fraseReimposta(_linguaAttiva)
+            : fraseCasuale();
+
+    final title = isSingola
+            ? titoloReimpostaNotifica(_linguaAttiva)
+            : isUltima
+                ? titoloReimpostaFrequenza(_linguaAttiva)
+                : null;
+
+          print('Programmo notifica $i su $_totaleNotifiche');
+          print('Data schedulata: $scheduledDate');
+          print('Testo: $body');
+          print('Titolo: $title');
+          
       await _plugin.zonedSchedule(
         id: i,
-        title: 'Smetti di Fumare',
+        title: title,
         body: body,
         scheduledDate: scheduledDate,
         notificationDetails: const NotificationDetails(
@@ -265,9 +319,12 @@ class ServizioNotifiche {
         payload: _payloadPromemoria,
       );
     }
+    print('Fine programmazione notifiche');
   }
 
   Future<void> cancellaPromemoria() async {
+print('cancellaPromemoria chiamato');
+
     _promemoriaAttivo = false;
     _durataAttiva = null;
     _totaleNotifiche = null;
@@ -275,5 +332,6 @@ class ServizioNotifiche {
 
     await AppStorage.saveReminderActive(false);
     await _plugin.cancelAll();
+    print('Tutte le notifiche cancellate');
   }
 }

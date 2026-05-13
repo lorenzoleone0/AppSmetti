@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:app_settings/app_settings.dart';
 
 import 'colori.dart';
 import 'Pagina_Risparmio.dart';
@@ -20,7 +23,7 @@ class PaginaImpostazioni extends StatefulWidget {
   final ValueChanged<Color> onColoreChanged;
 
   final String? linguaSelezionata;
-  final ValueChanged<String> onLinguaChanged;
+  final Future<void> Function(String) onLinguaChanged;
 
   @override
   State<PaginaImpostazioni> createState() => _PaginaImpostazioniState();
@@ -43,6 +46,93 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
     }
   }
 
+  static const String _androidPackageName =
+      'com.example.smetti'; // cambia con il tuo applicationId reale
+
+  Future<void> _apriExactAlarmSettings() async {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      await _apriImpostazioniApp();
+      return;
+    }
+
+    try {
+      const intent = AndroidIntent(
+        action: 'android.settings.REQUEST_SCHEDULE_EXACT_ALARM',
+        data: 'package:$_androidPackageName',
+      );
+      await intent.launch();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.exactAlarmError),
+          duration: const Duration(seconds: 6),
+        ),
+      );
+    }
+  }
+
+  Future<void> _apriBatteryOptimizationSettings() async {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      await _apriImpostazioniApp();
+      return;
+    }
+
+    try {
+      const intent = AndroidIntent(
+        action: 'action_application_details_settings',
+        data: 'package:$_androidPackageName',
+      );
+      await intent.launch();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.batteryOptimizationError),
+          duration: const Duration(seconds: 6),
+        ),
+      );
+    }
+  }
+
+  Future<void> _apriImpostazioniApp() async {
+    try {
+      await AppSettings.openAppSettings();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Impossibile aprire le impostazioni dell’app.'),
+        ),
+      );
+    }
+  }
+
+  Widget _buildSettingTile({
+    required IconData icon,
+   
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withOpacity(0.15)),
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.white),
+        subtitle: Text(subtitle, style: GoogleFonts.exo(color: Colors.white70)),
+        trailing: const Icon(Icons.chevron_right, color: Colors.white),
+        onTap: onTap,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -61,7 +151,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
       const MapEntry('fr', 'Français'),
       const MapEntry('de', 'Deutsch'),
       const MapEntry('ru', 'Русский'),
-      const MapEntry('zh', '中文'),
+      const MapEntry('pt', 'Português'),
       const MapEntry('ko', '한국어'),
     ];
 
@@ -106,10 +196,9 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                   onChanged: (String? nuovoValore) {
                     if (nuovoValore == null) return;
 
-                    final SfumaturaOpzione opzioneSelezionata =
-                        widget.opzioniSfumatura.firstWhere(
-                      (opzione) => opzione.id == nuovoValore,
-                    );
+                    final SfumaturaOpzione opzioneSelezionata = widget
+                        .opzioniSfumatura
+                        .firstWhere((opzione) => opzione.id == nuovoValore);
 
                     widget.onColoreChanged(opzioneSelezionata.colore);
                     Navigator.pop(context);
@@ -159,14 +248,14 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
-                  onChanged: (String? nuovoValore) {
+                  onChanged: (String? nuovoValore) async {
                     if (nuovoValore == null) return;
 
                     setState(() {
                       _linguaLocale = nuovoValore;
                     });
 
-                    widget.onLinguaChanged(nuovoValore);
+                    await widget.onLinguaChanged(nuovoValore);
                   },
                   items: lingue
                       .map(
@@ -196,7 +285,10 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                 border: Border.all(color: Colors.white.withOpacity(0.15)),
               ),
               child: ListTile(
-                leading: const Icon(Icons.savings_outlined, color: Colors.white),
+                leading: const Icon(
+                  Icons.savings_outlined,
+                  color: Colors.white,
+                ),
                 title: Text(
                   l10n.savingsTileTitle,
                   style: GoogleFonts.exo(
@@ -211,9 +303,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                 trailing: const Icon(Icons.chevron_right, color: Colors.white),
                 onTap: () async {
                   final changed = await Navigator.of(context).push<bool>(
-                    MaterialPageRoute(
-                      builder: (_) => const PaginaRisparmio(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const PaginaRisparmio()),
                   );
 
                   if (changed == true && context.mounted) {
@@ -222,6 +312,37 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                 },
               ),
             ),
+
+            const SizedBox(height: 28),
+            Text(
+              l10n.optimizationSectionTitle,
+              style: GoogleFonts.exo(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 12),
+          
+            if (defaultTargetPlatform == TargetPlatform.android) ...[
+              _buildSettingTile(
+                icon: Icons.alarm_on_rounded,
+                subtitle: l10n.exactAlarmSubtitle,
+                onTap: _apriExactAlarmSettings,
+              ),
+              const SizedBox(height: 12),
+              _buildSettingTile(
+                icon: Icons.battery_saver_outlined,  
+                subtitle: l10n.batteryOptimizationSubtitle,
+                onTap: _apriBatteryOptimizationSettings,
+              ),
+            ] else ...[
+              _buildSettingTile(
+                icon: Icons.settings_outlined, 
+                subtitle: 'Su iPhone puoi aprire le impostazioni dell’app.', //aggiungere l10n
+                onTap: _apriImpostazioniApp,
+              ),
+            ],
           ],
         ),
       ),
