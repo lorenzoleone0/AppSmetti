@@ -106,7 +106,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Impossibile aprire le impostazioni dell’app.'),
+          content: Text('Impossibile aprire impostazioni app(PER IPHONE)'),
         ),
       );
     }

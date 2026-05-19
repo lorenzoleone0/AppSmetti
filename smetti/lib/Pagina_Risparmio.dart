@@ -116,7 +116,7 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
     return _spesaGiornaliera() * giorni;
   }
 
-  String _euro(double valore) => '€ ${valore.toStringAsFixed(2)}';
+  String _euro(double valore) => '¥€£\$ ${valore.toStringAsFixed(2)}';
 
   Future<void> _salva() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;

@@ -5,7 +5,8 @@
 
 //aggiungere privacy e policy
 
-//aggiungere easter egg (se me và)
+//aggiungere easter egg (se me và). mettere nella sezione dell'euro un impostazione hìche se ci clicchi
+//due volte esce al posto della valuta ¥€£$, o che comunque ogni volta che clicchi è diverso 
 
 //chiamare l'app Domani Smetto (Tomorrow I Quit), andare su android manifest android:label="nome", per iOS: Vai in ios/Runner/Info.plist.
 //Cerca <key>CFBundleName</key> o <key>CFBundleDisplayName</key> e cambia la stringa subito sotto: 

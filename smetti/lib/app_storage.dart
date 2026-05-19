@@ -13,11 +13,22 @@ class AppStorage {
   static const String _keyReminderActive = 'pref_reminder_active';
   static const String _keyLanguage = 'pref_language';
   static const String _keyReminderEndAt = 'pref_reminder_end_at';
+  static const String _keySavingsEggIndex = 'savings_egg_index';
 
   static Future<void> saveReminderEndAt(DateTime value) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString(_keyReminderEndAt, value.toIso8601String());
 }
+
+ static Future<void> saveSavingsEggIndex(int index) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keySavingsEggIndex, index);
+  }
+
+  static Future<int> loadSavingsEggIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_keySavingsEggIndex) ?? 0;
+  }
 
 static Future<DateTime?> loadReminderEndAt() async {
   final prefs = await SharedPreferences.getInstance();

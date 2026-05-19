@@ -105,7 +105,24 @@ class _PaginaInizialeState extends State<PaginaIniziale>
     return base * giorni;
   }
 
-  String _euro(double valore) => '€ ${valore.toStringAsFixed(2)}';
+  final math.Random _rng = math.Random();
+
+  static const List<String> _savingsSymbols = [
+    '¥€£\$',
+    '¥€\$',
+    '¥£\$',
+    '£',
+    '€',
+    '\$',
+    '¥',
+  ];
+
+  int _savingsEggIndex = 0;
+  int _savingsAnimationIndex = 0;
+  int _savingsSparkToken = 0;
+  int? _sparkTargetDays;
+
+  //String _valuta(double valore) => '€ ${valore.toStringAsFixed(2)}';
 
   @override
   void dispose() {
@@ -115,30 +132,50 @@ class _PaginaInizialeState extends State<PaginaIniziale>
     super.dispose();
   }
 
-@override
-void didChangeAppLifecycleState(AppLifecycleState state) {
-  if (state == AppLifecycleState.resumed) {
-    _controllaPromemoriaTerminato();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _controllaPromemoriaTerminato();
+    }
   }
+
+  String _linguaAttivaOS() {
+    const supportate = ['it', 'en', 'es', 'fr', 'de', 'ru', 'pt', 'ko'];
+    final code = AppLocaleController.locale.value.languageCode;
+    return supportate.contains(code) ? code : 'en';
+  }
+
+  int _nextDifferentIndex(int current, int maxExclusive) {
+  if (maxExclusive <= 1) return 0;
+  final next = _rng.nextInt(maxExclusive - 1);
+  return next >= current ? next + 1 : next;
 }
 
-String _linguaAttivaOS() {
-  const supportate = ['it', 'en', 'es', 'fr', 'de', 'ru', 'pt', 'ko'];
-  final code = AppLocaleController.locale.value.languageCode;
-  return supportate.contains(code) ? code : 'en';
-}
-
-Future<void> _controllaPromemoriaTerminato() async {
-  final resettato =
-      await ServizioNotifiche.instance.resettaPromemoriaSeTerminato();
-
-  if (!mounted || !resettato) return;
-
+void _toggleSavingsEasterEgg(int giorni) {
   setState(() {
-    _frequenzaSelezionata = null;
-    _notificheInCodaSelezionate = null;
+    _savingsEggIndex = (_savingsEggIndex + 1) % _savingsSymbols.length;
+    _savingsAnimationIndex = _nextDifferentIndex(_savingsAnimationIndex, 4);
+    _sparkTargetDays = giorni;
+    _savingsSparkToken++;
   });
+
+  AppStorage.saveSavingsEggIndex(_savingsEggIndex);
 }
+
+  String _valuta(double valore) =>
+    '${_savingsSymbols[_savingsEggIndex]} ${valore.toStringAsFixed(2)}';
+
+  Future<void> _controllaPromemoriaTerminato() async {
+    final resettato = await ServizioNotifiche.instance
+        .resettaPromemoriaSeTerminato();
+
+    if (!mounted || !resettato) return;
+
+    setState(() {
+      _frequenzaSelezionata = null;
+      _notificheInCodaSelezionate = null;
+    });
+  }
 
   PageRouteBuilder<bool> _slideDaSinistra(Widget pagina) {
     return PageRouteBuilder<bool>(
@@ -191,46 +228,48 @@ Future<void> _controllaPromemoriaTerminato() async {
   }
 
   Future<void> _caricaPreferenze() async {
-  final frequenzaSalvata = _normalizeFrequencyCode(
-    await AppStorage.loadFrequency(),
-  );
-  
-  final notificheSalvate = await AppStorage.loadNotificationQueue();
-  final linguaSalvata = await AppStorage.loadLanguage();
-  final coloreSalvato = await AppStorage.loadGradientColor();
+    final frequenzaSalvata = _normalizeFrequencyCode(
+      await AppStorage.loadFrequency(),
+    );
 
-  final costoPacchetto = await AppStorage.loadPackPrice();
-  final quantitaMedia = await AppStorage.loadAverageAmount();
-  final consumoGiorni = await AppStorage.loadConsumptionDays();
+    final notificheSalvate = await AppStorage.loadNotificationQueue();
+    final linguaSalvata = await AppStorage.loadLanguage();
+    final coloreSalvato = await AppStorage.loadGradientColor();
 
-  if (!mounted) return;
+    final costoPacchetto = await AppStorage.loadPackPrice();
+    final quantitaMedia = await AppStorage.loadAverageAmount();
+    final consumoGiorni = await AppStorage.loadConsumptionDays();
+    final savingsEggIndex = await AppStorage.loadSavingsEggIndex();
 
-  final linguaDaMostrare = linguaSalvata ??
-      _linguaAttivaOS();
+    if (!mounted) return;
 
-  setState(() {
-    _frequenzaSelezionata = frequenzaSalvata;
-    _notificheInCodaSelezionate = notificheSalvate;
-    _linguaSelezionata = linguaSalvata;
+    final linguaDaMostrare = linguaSalvata ?? _linguaAttivaOS();
 
-    if (coloreSalvato != null) {
-      _coloreSfumatura = coloreSalvato;
-      _creaAnimazioneSfondo();
+    setState(() {
+      _frequenzaSelezionata = frequenzaSalvata;
+      _notificheInCodaSelezionate = notificheSalvate;
+      _linguaSelezionata = linguaSalvata;
+
+      _savingsEggIndex = savingsEggIndex % _savingsSymbols.length;
+
+      if (coloreSalvato != null) {
+        _coloreSfumatura = coloreSalvato;
+        _creaAnimazioneSfondo();
+      }
+
+      _costoPacchetto = costoPacchetto;
+      _quantitaMedia = quantitaMedia;
+      _consumoGiorni = consumoGiorni;
+    });
+
+    if (linguaSalvata == null) {
+      await AppStorage.saveLanguage(linguaDaMostrare);
+      await AppLocaleController.setLanguage(linguaDaMostrare);
     }
 
-    _costoPacchetto = costoPacchetto;
-    _quantitaMedia = quantitaMedia;
-    _consumoGiorni = consumoGiorni;
-  });
-
-if (linguaSalvata == null) {
-    await AppStorage.saveLanguage(linguaDaMostrare);
-    await AppLocaleController.setLanguage(linguaDaMostrare);
+    await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
+    await _controllaPromemoriaTerminato();
   }
-
-  await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
-  await _controllaPromemoriaTerminato();
-}
 
   Future<void> _salvaEProgrammaNotifiche() async {
     if (_frequenzaSelezionata == null || _notificheInCodaSelezionate == null) {
@@ -368,7 +407,11 @@ if (linguaSalvata == null) {
                           WidgetPagine.buildRisparmioCard(
                             l10n: l10n,
                             risparmioPer: _risparmioPer,
-                            euro: _euro,
+                            euro: _valuta,
+                            onAmountDoubleTap: _toggleSavingsEasterEgg,
+                            animationStyleIndex: _savingsAnimationIndex,
+                            sparkTargetDays: _sparkTargetDays,
+                            sparkToken: _savingsSparkToken,
                           ),
                       ],
                     ),
