@@ -1,14 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
 <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-<!-- <uses-permission android:name="android.permission.USE_EXACT_ALARM" /> -->
+ <uses-permission android:name="android.permission.USE_EXACT_ALARM" /> 
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 <!--android:label= "smetti"-->
     <application
         android:label="Domani Smetto"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
 
         <receiver
             android:exported="false"

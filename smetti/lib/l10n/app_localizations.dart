@@ -161,7 +161,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeIntroPart1.
   ///
   /// In en, this message translates to:
-  /// **'Set the notification frequency, to '**
+  /// **'Set the notification frequency to '**
   String get homeIntroPart1;
 
   /// No description provided for @homeIntroSmettere.
@@ -235,12 +235,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'20 notifications in queue'**
   String get queue20;
-
-  /// No description provided for @queue30.
-  ///
-  /// In en, this message translates to:
-  /// **'30 notifications in queue'**
-  String get queue30;
 
   /// No description provided for @savingsEstimatedTitle.
   ///
@@ -445,6 +439,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Also consider turning off battery optimization.'**
   String get batteryOptimizationSubtitle;
+
+  /// No description provided for @privacyPolicyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyTitle;
+
+  /// No description provided for @termsAndConditionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Conditions'**
+  String get termsAndConditionsTitle;
 }
 
 class _AppLocalizationsDelegate

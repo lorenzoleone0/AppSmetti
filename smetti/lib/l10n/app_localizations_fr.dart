@@ -9,176 +9,182 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appTitle => 'Quit Smoking';
+  String get appTitle => 'Arrête de Fumer';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => 'Paramètres';
 
   @override
-  String get changeGradientTitle => 'Change gradient';
+  String get changeGradientTitle => 'Changer le dégradé';
 
   @override
-  String get languageTitle => 'Language';
+  String get languageTitle => 'Langue';
 
   @override
-  String get selectLanguageHint => 'Select language';
+  String get selectLanguageHint => 'Sélectionne la langue';
 
   @override
-  String get savingsSectionTitle => 'Savings';
+  String get savingsSectionTitle => 'Économies';
 
   @override
-  String get savingsTileTitle => 'Pack cost and average consumption';
+  String get savingsTileTitle => 'Prix du paquet et consommation moyenne';
 
   @override
-  String get savingsTileSubtitle => 'Edit the data to calculate savings';
+  String get savingsTileSubtitle =>
+      'Modifie les données pour calculer tes économies';
 
   @override
-  String get homeIntroPart1 => 'Set the notification frequency, to ';
+  String get homeIntroPart1 => 'Définis la fréquence\ndes notifications pour ';
 
   @override
-  String get homeIntroSmettere => 'QUIT';
+  String get homeIntroSmettere => 'ARRÊTER';
 
   @override
-  String get homeIntroPart3 => ' smoking';
+  String get homeIntroPart3 => ' de fumer';
 
   @override
-  String get selectFrequencyHint => 'Select frequency';
+  String get selectFrequencyHint => 'Sélectionne la fréquence';
 
   @override
-  String get selectQueueHint => 'Select queue size';
+  String get selectQueueHint =>
+      'Sélectionne le nombre de notifications en file d\'attente';
 
   @override
-  String get frequency15 => 'Every 15 minutes';
+  String get frequency15 => 'Toutes les 15 minutes';
 
   @override
-  String get frequency30 => 'Every 30 minutes';
+  String get frequency30 => 'Toutes les 30 minutes';
 
   @override
-  String get frequency45 => 'Every 45 minutes';
+  String get frequency45 => 'Toutes les 45 minutes';
 
   @override
-  String get frequency1h => 'Every 1 hour';
+  String get frequency1h => 'Toutes les 1 heure';
 
   @override
-  String get frequency2h => 'Every 2 hours';
+  String get frequency2h => 'Toutes les 2 heures';
 
   @override
   String get queue1 => '1 notification';
 
   @override
-  String get queue10 => '10 notifications in queue';
+  String get queue10 => '10 notifications en file d\'attente';
 
   @override
-  String get queue20 => '20 notifications in queue';
+  String get queue20 => '20 notifications en file d\'attente';
 
   @override
-  String get queue30 => '30 notifications in queue';
+  String get savingsEstimatedTitle => 'Économie estimée';
 
   @override
-  String get savingsEstimatedTitle => 'Estimated savings';
+  String get days30 => '30 jours';
 
   @override
-  String get days30 => '30 days';
+  String get days60 => '60 jours';
 
   @override
-  String get days60 => '60 days';
+  String get days90 => '90 jours';
 
   @override
-  String get days90 => '90 days';
+  String get months6 => '6 mois';
 
   @override
-  String get months6 => '6 months';
+  String get year1 => '1 an';
 
   @override
-  String get year1 => '1 year';
+  String get resetNotificationTitle => 'Réinitialiser la notification';
 
   @override
-  String get resetNotificationTitle => 'Reset notification';
+  String get resetFrequencyTitle => 'Réinitialiser la fréquence';
 
   @override
-  String get resetFrequencyTitle => 'Reset frequency';
+  String get resetFrequency => 'Réinitialiser la fréquence';
 
   @override
-  String get resetFrequency => 'Reset the frequency';
-
-  @override
-  String get savingsPageTitle => 'Your savings';
+  String get savingsPageTitle => 'Tes économies';
 
   @override
   String get savingsIntro =>
-      'Enter the average pack price and your average consumption.';
+      'Saisis le prix moyen du paquet et la consommation moyenne.';
 
   @override
-  String get packPriceLabel => 'Average pack price';
+  String get packPriceLabel => 'Prix moyen du paquet';
 
   @override
-  String get averageConsumptionLabel => 'Average pack/cigarette consumption';
+  String get averageConsumptionLabel =>
+      'Consommation moyenne paquet/cigarettes';
 
   @override
   String get averageConsumptionSubtitle =>
-      'Considering a pack of 20 cigarettes,\n1 cigarette = 0.05 pack\n1.00 = 1 pack';
+      'En considérant un paquet de 20 cigarettes,\n1 cigarette = 0,05 paquet\n1,00 = 1 paquet';
 
   @override
-  String get consumptionReferenceLabel => 'The average quantity refers to';
+  String get consumptionReferenceLabel => 'La quantité moyenne se réfère à';
 
   @override
-  String get invalidNumberError => 'Enter a valid number greater than 0';
+  String get invalidNumberError => 'Saisis un nombre valide supérieur à 0';
 
   @override
-  String get saveAndContinue => 'Save and continue';
+  String get saveAndContinue => 'Enregistrer et continuer';
 
   @override
-  String get consumptionOption1Day => 'One day';
+  String get consumptionOption1Day => 'Un jour';
 
   @override
-  String get consumptionOption2Days => 'Two days';
+  String get consumptionOption2Days => 'Deux jours';
 
   @override
-  String get consumptionOption3Days => 'Three days';
+  String get consumptionOption3Days => 'Trois jours';
 
   @override
-  String get consumptionOption4Days => 'Four days';
+  String get consumptionOption4Days => 'Quatre jours';
 
   @override
-  String get consumptionOption5Days => 'Five days';
+  String get consumptionOption5Days => 'Cinq jours';
 
   @override
-  String get consumptionOption1Week => 'One week';
+  String get consumptionOption1Week => 'Une semaine';
 
   @override
-  String get gradientRed => 'Red';
+  String get gradientRed => 'Rouge';
 
   @override
-  String get gradientBlue => 'Blue';
+  String get gradientBlue => 'Bleu';
 
   @override
-  String get gradientGreen => 'Green';
+  String get gradientGreen => 'Vert';
 
   @override
-  String get gradientPurple => 'Purple';
+  String get gradientPurple => 'Violet';
 
   @override
   String get gradientOrange => 'Orange';
 
   @override
-  String get gradientGray => 'Gray';
+  String get gradientGray => 'Gris';
 
   @override
-  String get optimizationSectionTitle => 'Optimize app';
+  String get optimizationSectionTitle => 'Optimiser l\'application';
 
   @override
   String get exactAlarmSubtitle =>
-      'For more reliable app behavior, enable exact alarm handling.';
+      'Pour un fonctionnement plus fiable de l\'application, active la gestion des alarmes exactes.';
 
   @override
   String get exactAlarmError =>
-      'Unable to open the exact alarm settings screen on this device.';
+      'Impossible d\'ouvrir l\'écran des alarmes exactes sur cet appareil.';
 
   @override
   String get batteryOptimizationError =>
-      'Unable to open the About screen on this device.';
+      'Impossible d\'ouvrir l\'écran d\'informations sur cet appareil.';
 
   @override
   String get batteryOptimizationSubtitle =>
-      'Also consider turning off battery optimization.';
+      'Pense aussi à désactiver l\'optimisation de la batterie.';
+
+  @override
+  String get privacyPolicyTitle => 'Politique de confidentialité';
+
+  @override
+  String get termsAndConditionsTitle => 'Conditions d’utilisation';
 }

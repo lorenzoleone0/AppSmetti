@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'app_locale.dart';
 import 'app_storage.dart';
 import 'colori.dart';
@@ -33,7 +32,8 @@ class _PaginaInizialeState extends State<PaginaIniziale>
 
   Color _coloreSfumatura = const Color.fromARGB(255, 87, 1, 1);
 
-  TextStyle get _testoBase => GoogleFonts.exo(
+  TextStyle get _testoBase => const TextStyle(
+    fontFamily: 'Exo',
     color: Colors.white,
     fontSize: 28,
     fontWeight: FontWeight.w700,
@@ -115,6 +115,7 @@ class _PaginaInizialeState extends State<PaginaIniziale>
     '€',
     '\$',
     '¥',
+    '₽',
   ];
 
   int _savingsEggIndex = 0;

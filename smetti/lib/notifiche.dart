@@ -26,7 +26,7 @@ class ServizioNotifiche {
   Future<void> init() async {
     if (_inizializzato) return;
 
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidInit = AndroidInitializationSettings('ic_notification');
     const darwinInit = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -310,7 +310,7 @@ print('Ora inizio: $oraInizio');
             'Promemoria Smetti di Fumare',
             channelDescription: 'Notifiche motivazionali personalizzate',
             importance: Importance.max,
-            priority: Priority.high,
+            priority: Priority.max,
           ),
           iOS: DarwinNotificationDetails(),
           macOS: DarwinNotificationDetails(),

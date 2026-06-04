@@ -10,7 +10,7 @@ class AppLocaleController {
     'fr',
     'de',
     'ru',
-    'zh',
+    'pt',
     'ko',
   ];
 

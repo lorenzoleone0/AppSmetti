@@ -35,7 +35,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get homeIntroPart1 =>
-      'Stelle die Häufigkeit\nder Benachrichtigungen ein, um ';
+      'Stelle die Häufigkeit\nder Benachrichtigungen ein um ';
 
   @override
   String get homeIntroSmettere => 'AUFZUHÖREN';
@@ -72,9 +72,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get queue20 => '20 Benachrichtigungen in der Warteschlange';
-
-  @override
-  String get queue30 => '30 Benachrichtigungen in der Warteschlange';
 
   @override
   String get savingsEstimatedTitle => 'Geschätzte Ersparnis';
@@ -186,4 +183,10 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get batteryOptimizationSubtitle =>
       'Erwägen Sie außerdem, die Batterieoptimierung zu deaktivieren.';
+
+  @override
+  String get privacyPolicyTitle => 'Datenschutzerklärung';
+
+  @override
+  String get termsAndConditionsTitle => 'Nutzungsbedingungen';
 }

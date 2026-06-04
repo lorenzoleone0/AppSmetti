@@ -8,7 +8,7 @@
   "savingsSectionTitle": "Savings",
   "savingsTileTitle": "Pack cost and average consumption",
   "savingsTileSubtitle": "Edit the data to calculate savings",
-  "homeIntroPart1": "Set the notification frequency, to ",
+  "homeIntroPart1": "Set the notification frequency to ",
   "homeIntroSmettere": "QUIT",
   "homeIntroPart3": " smoking",
   "selectFrequencyHint": "Select frequency",
@@ -23,8 +23,6 @@
   "queue1": "1 notification",
   "queue10": "10 notifications in queue",
   "queue20": "20 notifications in queue",
-  "queue30": "30 notifications in queue",
-  
 
   "savingsEstimatedTitle": "Estimated savings",
   "days30": "30 days",
@@ -71,5 +69,8 @@
   "exactAlarmSubtitle": "For more reliable app behavior, enable exact alarm handling.",
   "exactAlarmError": "Unable to open the exact alarm settings screen on this device.",
   "batteryOptimizationError": "Unable to open the About screen on this device.",
-  "batteryOptimizationSubtitle": "Also consider turning off battery optimization."
+  "batteryOptimizationSubtitle": "Also consider turning off battery optimization.",
+
+  "privacyPolicyTitle": "Privacy Policy",
+  "termsAndConditionsTitle": "Terms and Conditions"
 }

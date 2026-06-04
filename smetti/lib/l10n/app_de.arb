@@ -8,7 +8,7 @@
   "savingsSectionTitle": "Ersparnis",
   "savingsTileTitle": "Paketpreis und durchschnittlicher Verbrauch",
   "savingsTileSubtitle": "Ändere die Daten, um die Ersparnis zu berechnen",
-  "homeIntroPart1": "Stelle die Häufigkeit\nder Benachrichtigungen ein, um ",
+  "homeIntroPart1": "Stelle die Häufigkeit\nder Benachrichtigungen ein um ",
   "homeIntroSmettere": "AUFZUHÖREN",
   "homeIntroPart3": " zu rauchen",
   "selectFrequencyHint": "Häufigkeit auswählen",
@@ -23,7 +23,6 @@
   "queue1": "1 Benachrichtigung",
   "queue10": "10 Benachrichtigungen in der Warteschlange",
   "queue20": "20 Benachrichtigungen in der Warteschlange",
-  "queue30": "30 Benachrichtigungen in der Warteschlange",
   
   "savingsEstimatedTitle": "Geschätzte Ersparnis",
   "days30": "30 Tage",
@@ -63,5 +62,8 @@
   "exactAlarmSubtitle": "Für eine zuverlässigere Funktion der App aktiviere die Verwaltung exakter Alarme.",
   "exactAlarmError": "Die Seite für exakte Alarme kann auf diesem Gerät nicht geöffnet werden.",
   "batteryOptimizationError": "Der Info-Bildschirm kann auf diesem Gerät nicht geöffnet werden.",
-  "batteryOptimizationSubtitle": "Erwägen Sie außerdem, die Batterieoptimierung zu deaktivieren."
+  "batteryOptimizationSubtitle": "Erwägen Sie außerdem, die Batterieoptimierung zu deaktivieren.",
+
+  "privacyPolicyTitle": "Datenschutzerklärung",
+  "termsAndConditionsTitle": "Nutzungsbedingungen"
 }

@@ -8,7 +8,7 @@
   "savingsSectionTitle": "Risparmio",
   "savingsTileTitle": "Costo pacchetto e consumo medio",
   "savingsTileSubtitle": "Modifica i dati per calcolare il risparmio",
-  "homeIntroPart1": "Imposta la frequenza\ndelle notifiche, per ",
+  "homeIntroPart1": "Imposta la frequenza\ndelle notifiche per ",
   "homeIntroSmettere": "SMETTERE",
   "homeIntroPart3": " di fumare",
   "selectFrequencyHint": "Seleziona frequenza",
@@ -23,7 +23,6 @@
   "queue1": "1 notifica",
   "queue10": "10 notifiche in coda",
   "queue20": "20 notifiche in coda",
-  "queue30": "30 notifiche in coda",
 
   "savingsEstimatedTitle": "Risparmio stimato",
   "days30": "30 giorni",
@@ -70,5 +69,8 @@
   "exactAlarmSubtitle": "Per un funzionamento più affidabile dell'app, attiva la gestione degli allarmi esatti.",
   "exactAlarmError": "Impossibile aprire la schermata degli allarmi esatti su questo dispositivo.",
   "batteryOptimizationError": "Impossibile aprire la schermata delle informazioni su questo dispositivo.",
-  "batteryOptimizationSubtitle": "Considera anche di togliere l'ottimizzazione della batteria."
+  "batteryOptimizationSubtitle": "Considera anche di togliere l'ottimizzazione della batteria.",
+
+  "privacyPolicyTitle": "Privacy Policy",
+  "termsAndConditionsTitle": "Termini e condizioni"
 }

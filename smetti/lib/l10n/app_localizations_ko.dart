@@ -9,176 +9,174 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => 'Quit Smoking';
+  String get appTitle => '금연하기';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => '설정';
 
   @override
-  String get changeGradientTitle => 'Change gradient';
+  String get changeGradientTitle => '그라데이션 변경';
 
   @override
-  String get languageTitle => 'Language';
+  String get languageTitle => '언어';
 
   @override
-  String get selectLanguageHint => 'Select language';
+  String get selectLanguageHint => '언어 선택';
 
   @override
-  String get savingsSectionTitle => 'Savings';
+  String get savingsSectionTitle => '절약';
 
   @override
-  String get savingsTileTitle => 'Pack cost and average consumption';
+  String get savingsTileTitle => '담배 한 갑 가격과 평균 소비량';
 
   @override
-  String get savingsTileSubtitle => 'Edit the data to calculate savings';
+  String get savingsTileSubtitle => '절약 금액을 계산하려면 데이터를 수정하세요';
 
   @override
-  String get homeIntroPart1 => 'Set the notification frequency, to ';
+  String get homeIntroPart1 => '알림 빈도를 설정해\n ';
 
   @override
-  String get homeIntroSmettere => 'QUIT';
+  String get homeIntroSmettere => '금연';
 
   @override
-  String get homeIntroPart3 => ' smoking';
+  String get homeIntroPart3 => ' 을 도와주세요';
 
   @override
-  String get selectFrequencyHint => 'Select frequency';
+  String get selectFrequencyHint => '빈도 선택';
 
   @override
-  String get selectQueueHint => 'Select queue size';
+  String get selectQueueHint => '대기 중인 알림 수 선택';
 
   @override
-  String get frequency15 => 'Every 15 minutes';
+  String get frequency15 => '15분마다';
 
   @override
-  String get frequency30 => 'Every 30 minutes';
+  String get frequency30 => '30분마다';
 
   @override
-  String get frequency45 => 'Every 45 minutes';
+  String get frequency45 => '45분마다';
 
   @override
-  String get frequency1h => 'Every 1 hour';
+  String get frequency1h => '1시간마다';
 
   @override
-  String get frequency2h => 'Every 2 hours';
+  String get frequency2h => '2시간마다';
 
   @override
-  String get queue1 => '1 notification';
+  String get queue1 => '알림 1개';
 
   @override
-  String get queue10 => '10 notifications in queue';
+  String get queue10 => '대기 중인 알림 10개';
 
   @override
-  String get queue20 => '20 notifications in queue';
+  String get queue20 => '대기 중인 알림 20개';
 
   @override
-  String get queue30 => '30 notifications in queue';
+  String get savingsEstimatedTitle => '예상 절약 금액';
 
   @override
-  String get savingsEstimatedTitle => 'Estimated savings';
+  String get days30 => '30일';
 
   @override
-  String get days30 => '30 days';
+  String get days60 => '60일';
 
   @override
-  String get days60 => '60 days';
+  String get days90 => '90일';
 
   @override
-  String get days90 => '90 days';
+  String get months6 => '6개월';
 
   @override
-  String get months6 => '6 months';
+  String get year1 => '1년';
 
   @override
-  String get year1 => '1 year';
+  String get resetNotificationTitle => '알림 초기화';
 
   @override
-  String get resetNotificationTitle => 'Reset notification';
+  String get resetFrequencyTitle => '빈도 초기화';
 
   @override
-  String get resetFrequencyTitle => 'Reset frequency';
+  String get resetFrequency => '빈도 초기화';
 
   @override
-  String get resetFrequency => 'Reset the frequency';
+  String get savingsPageTitle => '당신의 절약';
 
   @override
-  String get savingsPageTitle => 'Your savings';
+  String get savingsIntro => '담배 한 갑의 평균 가격과 평균 소비량을 입력하세요.';
 
   @override
-  String get savingsIntro =>
-      'Enter the average pack price and your average consumption.';
+  String get packPriceLabel => '담배 한 갑 평균 가격';
 
   @override
-  String get packPriceLabel => 'Average pack price';
-
-  @override
-  String get averageConsumptionLabel => 'Average pack/cigarette consumption';
+  String get averageConsumptionLabel => '평균 소비량(팩/담배)';
 
   @override
   String get averageConsumptionSubtitle =>
-      'Considering a pack of 20 cigarettes,\n1 cigarette = 0.05 pack\n1.00 = 1 pack';
+      '담배 한 갑을 20개비 기준으로 계산하면,\n담배 1개비 = 0.05팩\n1.00 = 1팩';
 
   @override
-  String get consumptionReferenceLabel => 'The average quantity refers to';
+  String get consumptionReferenceLabel => '평균 수량 기준';
 
   @override
-  String get invalidNumberError => 'Enter a valid number greater than 0';
+  String get invalidNumberError => '0보다 큰 올바른 숫자를 입력하세요';
 
   @override
-  String get saveAndContinue => 'Save and continue';
+  String get saveAndContinue => '저장하고 계속하기';
 
   @override
-  String get consumptionOption1Day => 'One day';
+  String get consumptionOption1Day => '하루';
 
   @override
-  String get consumptionOption2Days => 'Two days';
+  String get consumptionOption2Days => '이틀';
 
   @override
-  String get consumptionOption3Days => 'Three days';
+  String get consumptionOption3Days => '사흘';
 
   @override
-  String get consumptionOption4Days => 'Four days';
+  String get consumptionOption4Days => '나흘';
 
   @override
-  String get consumptionOption5Days => 'Five days';
+  String get consumptionOption5Days => '닷새';
 
   @override
-  String get consumptionOption1Week => 'One week';
+  String get consumptionOption1Week => '일주일';
 
   @override
-  String get gradientRed => 'Red';
+  String get gradientRed => '빨강';
 
   @override
-  String get gradientBlue => 'Blue';
+  String get gradientBlue => '파랑';
 
   @override
-  String get gradientGreen => 'Green';
+  String get gradientGreen => '초록';
 
   @override
-  String get gradientPurple => 'Purple';
+  String get gradientPurple => '보라';
 
   @override
-  String get gradientOrange => 'Orange';
+  String get gradientOrange => '주황';
 
   @override
-  String get gradientGray => 'Gray';
+  String get gradientGray => '회색';
 
   @override
-  String get optimizationSectionTitle => 'Optimize app';
+  String get optimizationSectionTitle => '앱 최적화';
 
   @override
-  String get exactAlarmSubtitle =>
-      'For more reliable app behavior, enable exact alarm handling.';
+  String get exactAlarmSubtitle => '앱을 더 안정적으로 사용하려면 정확한 알람 관리를 활성화하세요.';
 
   @override
-  String get exactAlarmError =>
-      'Unable to open the exact alarm settings screen on this device.';
+  String get exactAlarmError => '이 기기에서는 정확한 알람 화면을 열 수 없습니다.';
 
   @override
-  String get batteryOptimizationError =>
-      'Unable to open the About screen on this device.';
+  String get batteryOptimizationError => '이 기기에서는 정보 화면을 열 수 없습니다.';
 
   @override
-  String get batteryOptimizationSubtitle =>
-      'Also consider turning off battery optimization.';
+  String get batteryOptimizationSubtitle => '배터리 최적화도 해제하는 것이 좋습니다.';
+
+  @override
+  String get privacyPolicyTitle => '개인정보 처리방침';
+
+  @override
+  String get termsAndConditionsTitle => '이용약관';
 }

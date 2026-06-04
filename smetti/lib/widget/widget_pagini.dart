@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 
 class WidgetPagine {
@@ -66,14 +65,12 @@ class WidgetPagine {
           return l10n.queue10;
         case 20:
           return l10n.queue20;
-        case 30:
-          return l10n.queue30;
         default:
           return '$numero';
       }
     }
 
-    final codeNotifiche = <int>[1, 10, 20, 30];
+    final codeNotifiche = <int>[1, 10, 20];
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -157,7 +154,8 @@ class WidgetPagine {
       MapEntry(l10n.year1, 365),
     ];
 
-    final valueStyle = GoogleFonts.exo(
+    final valueStyle = const TextStyle(
+    fontFamily: 'Exo',
       color: Colors.white,
       fontSize: 15,
       fontWeight: FontWeight.w700,
@@ -185,7 +183,8 @@ class WidgetPagine {
         children: [
           Text(
             l10n.savingsEstimatedTitle,
-            style: GoogleFonts.exo(
+            style: const TextStyle(
+    fontFamily: 'Exo',
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -199,7 +198,8 @@ class WidgetPagine {
                 children: [
                   Text(
                     item.key,
-                    style: GoogleFonts.exo(color: Colors.white, fontSize: 15),
+                    style: const TextStyle(
+    fontFamily: 'Exo',color: Colors.white, fontSize: 15),
                   ),
                   const Spacer(),
                   SavingsAmountRow(
@@ -377,7 +377,8 @@ class _SavingsAmountRowState extends State<SavingsAmountRow>
                 textAlign: TextAlign.right,
                 maxLines: 1,
                 softWrap: false,
-                style: GoogleFonts.exo(
+                style: const TextStyle(
+                  fontFamily: 'Exo',
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,

@@ -20,7 +20,8 @@ Future<void> main() async {
   final currentTimeZone = await FlutterTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(currentTimeZone.identifier));
 } catch (e) {
-  tz.setLocalLocation(tz.getLocation('Europe/Rome'));
+  debugPrint('Timezone lookup failed: $e');
+  tz.setLocalLocation(tz.getLocation('UTC'));
 }
 
   await AppLocaleController.loadSavedLocale();

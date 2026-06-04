@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_storage.dart';
 import 'Pagina_Iniziale.dart';
@@ -168,7 +167,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
         children: [
           Text(
             label,
-            style: GoogleFonts.exo(
+            style: const TextStyle(
+    fontFamily: 'Exo',
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -178,7 +178,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
             const SizedBox(height: 6),
             Text(
               subtitle,
-              style: GoogleFonts.exo(
+              style: const TextStyle(
+    fontFamily: 'Exo',
                 color: Colors.white70,
                 fontSize: 13,
               ),
@@ -199,7 +200,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.exo(
+                  style: const TextStyle(
+    fontFamily: 'Exo',
                     color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
@@ -252,7 +254,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
         children: [
           Text(
             label,
-            style: GoogleFonts.exo(
+            style: const TextStyle(
+    fontFamily: 'Exo',
               color: Colors.white,
               fontSize: 15,
             ),
@@ -260,7 +263,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
           const Spacer(),
           Text(
             _euro(value),
-            style: GoogleFonts.exo(
+            style: const TextStyle(
+    fontFamily: 'Exo',
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w700,
@@ -306,7 +310,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
         foregroundColor: Colors.white,
         title: Text(
           l10n.savingsPageTitle,
-          style: GoogleFonts.exo(fontWeight: FontWeight.w600),
+          style: const TextStyle(
+    fontFamily: 'Exo',fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -334,7 +339,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
                 children: [
                   Text(
                     l10n.savingsIntro,
-                    style: GoogleFonts.exo(
+                    style: const TextStyle(
+    fontFamily: 'Exo',
                       color: Colors.white,
                       fontSize: 15,
                       height: 1.4,
@@ -393,11 +399,13 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: l10n.consumptionReferenceLabel,
-                          labelStyle: GoogleFonts.exo(
+                          labelStyle: const TextStyle(
+    fontFamily: 'Exo',
                             color: Colors.white70,
                           ),
                         ),
-                        style: GoogleFonts.exo(
+                        style: const TextStyle(
+    fontFamily: 'Exo',
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -434,7 +442,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
                       children: [
                         Text(
                           l10n.savingsEstimatedTitle,
-                          style: GoogleFonts.exo(
+                          style: const TextStyle(
+    fontFamily: 'Exo',
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -460,7 +469,8 @@ class _PaginaRisparmioState extends State<PaginaRisparmio> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        textStyle: GoogleFonts.exo(
+                        textStyle: const TextStyle(
+    fontFamily: 'Exo',
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),

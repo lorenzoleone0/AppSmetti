@@ -33,7 +33,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savingsTileSubtitle => 'Edit the data to calculate savings';
 
   @override
-  String get homeIntroPart1 => 'Set the notification frequency, to ';
+  String get homeIntroPart1 => 'Set the notification frequency to ';
 
   @override
   String get homeIntroSmettere => 'QUIT';
@@ -70,9 +70,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get queue20 => '20 notifications in queue';
-
-  @override
-  String get queue30 => '30 notifications in queue';
 
   @override
   String get savingsEstimatedTitle => 'Estimated savings';
@@ -181,4 +178,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get batteryOptimizationSubtitle =>
       'Also consider turning off battery optimization.';
+
+  @override
+  String get privacyPolicyTitle => 'Privacy Policy';
+
+  @override
+  String get termsAndConditionsTitle => 'Terms and Conditions';
 }

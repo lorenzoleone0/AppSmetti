@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:app_settings/app_settings.dart';
 
@@ -47,7 +47,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
   }
 
   static const String _androidPackageName =
-      'com.example.smetti'; // cambia con il tuo applicationId reale
+      'com.lil.smetti'; 
 
   Future<void> _apriExactAlarmSettings() async {
     final l10n = AppLocalizations.of(context)!;
@@ -68,7 +68,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.exactAlarmError),
-          duration: const Duration(seconds: 6),
+          duration: const Duration(seconds: 5),
         ),
       );
     }
@@ -93,7 +93,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.batteryOptimizationError),
-          duration: const Duration(seconds: 6),
+          duration: const Duration(seconds: 5),
         ),
       );
     }
@@ -106,15 +106,25 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Impossibile aprire impostazioni app(PER IPHONE)'),
+          content: Text('Impossibile aprire impostazioni app (iPhone).'),
         ),
       );
     }
   }
 
+  Future<void> _apriPaginaLegale({
+    required String titolo,
+    required String assetPath,
+  }) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PaginaTestoLegale(titolo: titolo, assetPath: assetPath),
+      ),
+    );
+  }
+
   Widget _buildSettingTile({
     required IconData icon,
-   
     required String subtitle,
     required VoidCallback onTap,
   }) {
@@ -126,9 +136,32 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
       ),
       child: ListTile(
         leading: Icon(icon, color: Colors.white),
-        subtitle: Text(subtitle, style: GoogleFonts.exo(color: Colors.white70)),
+        subtitle: Text(
+          subtitle,
+          style: const TextStyle(fontFamily: 'Exo', color: Colors.white70),
+        ),
         trailing: const Icon(Icons.chevron_right, color: Colors.white),
         onTap: onTap,
+      ),
+    );
+  }
+
+  Widget _buildLegalLink({required String label, required VoidCallback onTap}) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontFamily: 'Exo',
+            color: Colors.white70,
+            decoration: TextDecoration.underline,
+            decorationColor: Colors.white70,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }
@@ -162,7 +195,10 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
         foregroundColor: Colors.white,
         title: Text(
           l10n.settingsTitle,
-          style: GoogleFonts.exo(fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontFamily: 'Exo',
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -172,7 +208,8 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
           children: [
             Text(
               l10n.changeGradientTitle,
-              style: GoogleFonts.exo(
+              style: const TextStyle(
+                fontFamily: 'Exo',
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -192,7 +229,10 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                   isExpanded: true,
                   dropdownColor: Colors.grey.shade900,
                   iconEnabledColor: Colors.white,
-                  style: GoogleFonts.exo(fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    fontFamily: 'Exo',
+                    fontWeight: FontWeight.w600,
+                  ),
                   onChanged: (String? nuovoValore) {
                     if (nuovoValore == null) return;
 
@@ -217,7 +257,8 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
             const SizedBox(height: 28),
             Text(
               l10n.languageTitle,
-              style: GoogleFonts.exo(
+              style: const TextStyle(
+                fontFamily: 'Exo',
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -239,12 +280,14 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                   iconEnabledColor: Colors.white,
                   hint: Text(
                     l10n.selectLanguageHint,
-                    style: GoogleFonts.exo(
+                    style: const TextStyle(
+                      fontFamily: 'Exo',
                       color: Colors.white70,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  style: GoogleFonts.exo(
+                  style: const TextStyle(
+                    fontFamily: 'Exo',
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
@@ -271,7 +314,8 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
             const SizedBox(height: 28),
             Text(
               l10n.savingsSectionTitle,
-              style: GoogleFonts.exo(
+              style: const TextStyle(
+                fontFamily: 'Exo',
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -291,14 +335,18 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                 ),
                 title: Text(
                   l10n.savingsTileTitle,
-                  style: GoogleFonts.exo(
+                  style: const TextStyle(
+                    fontFamily: 'Exo',
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 subtitle: Text(
                   l10n.savingsTileSubtitle,
-                  style: GoogleFonts.exo(color: Colors.white70),
+                  style: const TextStyle(
+                    fontFamily: 'Exo',
+                    color: Colors.white70,
+                  ),
                 ),
                 trailing: const Icon(Icons.chevron_right, color: Colors.white),
                 onTap: () async {
@@ -312,18 +360,17 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
                 },
               ),
             ),
-
             const SizedBox(height: 28),
             Text(
               l10n.optimizationSectionTitle,
-              style: GoogleFonts.exo(
+              style: const TextStyle(
+                fontFamily: 'Exo',
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 12),
-          
             if (defaultTargetPlatform == TargetPlatform.android) ...[
               _buildSettingTile(
                 icon: Icons.alarm_on_rounded,
@@ -332,19 +379,127 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
               ),
               const SizedBox(height: 12),
               _buildSettingTile(
-                icon: Icons.battery_saver_outlined,  
+                icon: Icons.battery_saver_outlined,
                 subtitle: l10n.batteryOptimizationSubtitle,
                 onTap: _apriBatteryOptimizationSettings,
               ),
             ] else ...[
               _buildSettingTile(
-                icon: Icons.settings_outlined, 
-                subtitle: 'Su iPhone puoi aprire le impostazioni dell’app.', //aggiungere l10n
+                icon: Icons.settings_outlined,
+                subtitle: 'Su iPhone puoi aprire le impostazioni dell’app.',
                 onTap: _apriImpostazioniApp,
               ),
             ],
+            const SizedBox(height: 28),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.06),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white.withOpacity(0.12)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 8,
+                    children: [
+                      _buildLegalLink(
+                        label: l10n.privacyPolicyTitle,
+                        onTap: () => _apriPaginaLegale(
+                          titolo: l10n.privacyPolicyTitle,
+                          assetPath: 'assets/legal/privacy.txt',
+                        ),
+                      ),
+                      _buildLegalLink(
+                        label: l10n.termsAndConditionsTitle,
+                        onTap: () => _apriPaginaLegale(
+                          titolo: l10n.termsAndConditionsTitle,
+                          assetPath: 'assets/legal/termini.txt',
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class PaginaTestoLegale extends StatelessWidget {
+  const PaginaTestoLegale({
+    super.key,
+    required this.titolo,
+    required this.assetPath,
+  });
+
+  final String titolo;
+  final String assetPath;
+
+  Future<String> _caricaTesto() async {
+    return rootBundle.loadString(assetPath);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        title: Text(
+          titolo,
+          style: const TextStyle(
+            fontFamily: 'Exo',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: FutureBuilder<String>(
+        future: _caricaTesto(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  'Impossibile caricare il contenuto legale.',
+                  style: const TextStyle(
+                    fontFamily: 'Exo',
+                    color: Colors.white70,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
+          final testo = snapshot.data ?? '';
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: SelectableText(
+              testo,
+              style: const TextStyle(
+                fontFamily: 'Exo',
+                color: Colors.white,
+                height: 1.45,
+                fontSize: 15,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

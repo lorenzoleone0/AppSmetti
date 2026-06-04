@@ -34,7 +34,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'Modifica i dati per calcolare il risparmio';
 
   @override
-  String get homeIntroPart1 => 'Imposta la frequenza\ndelle notifiche, per ';
+  String get homeIntroPart1 => 'Imposta la frequenza\ndelle notifiche per ';
 
   @override
   String get homeIntroSmettere => 'SMETTERE';
@@ -71,9 +71,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get queue20 => '20 notifiche in coda';
-
-  @override
-  String get queue30 => '30 notifiche in coda';
 
   @override
   String get savingsEstimatedTitle => 'Risparmio stimato';
@@ -182,4 +179,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get batteryOptimizationSubtitle =>
       'Considera anche di togliere l\'ottimizzazione della batteria.';
+
+  @override
+  String get privacyPolicyTitle => 'Privacy Policy';
+
+  @override
+  String get termsAndConditionsTitle => 'Termini e condizioni';
 }
