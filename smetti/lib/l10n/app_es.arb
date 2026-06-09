@@ -49,6 +49,7 @@
   "gradientGreen": "Verde",
   "gradientPurple": "Morado",
   "gradientOrange": "Naranja",
+  "gradientYellow": "Amarillo",
   "gradientGray": "Gris",
   "optimizationSectionTitle": "Optimizar la aplicación",
   "exactAlarmSubtitle": "Para un funcionamiento más fiable de la app, activa la gestión de alarmas exactas.",

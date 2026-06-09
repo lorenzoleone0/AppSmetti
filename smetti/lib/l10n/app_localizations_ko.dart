@@ -157,6 +157,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get gradientOrange => '주황';
 
   @override
+  String get gradientYellow => '노란색';
+
+  @override
   String get gradientGray => '회색';
 
   @override

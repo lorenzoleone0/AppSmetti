@@ -159,6 +159,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get gradientOrange => 'Оранжевый';
 
   @override
+  String get gradientYellow => 'Желтый';
+
+  @override
   String get gradientGray => 'Серый';
 
   @override

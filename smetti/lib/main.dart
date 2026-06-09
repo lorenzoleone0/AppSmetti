@@ -23,18 +23,39 @@ Future<void> main() async {
   debugPrint('Timezone lookup failed: $e');
   tz.setLocalLocation(tz.getLocation('UTC'));
 }
-
   await AppLocaleController.loadSavedLocale();
+
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   await ServizioNotifiche.instance.init();
   await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
   await ServizioNotifiche.instance.resettaPromemoriaSeTerminato();
+
+  runApp(const MyApp());
+  
+  /* await ServizioNotifiche.instance.init();
+  await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
+  await ServizioNotifiche.instance.resettaPromemoriaSeTerminato(); */ 
+ /*  await AppLocaleController.loadSavedLocale();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
 
   runApp(const MyApp());
+
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    try {
+      await ServizioNotifiche.instance.init();
+      await ServizioNotifiche.instance.sincronizzaPromemoriaAllAvvio();
+      await ServizioNotifiche.instance.resettaPromemoriaSeTerminato();
+    } catch (e) {
+      debugPrint('Errore inizializzazione notifiche: $e');
+    }
+  }); */
 }
 
 class MyApp extends StatelessWidget {

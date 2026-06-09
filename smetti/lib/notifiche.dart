@@ -146,21 +146,18 @@ Future<bool> resettaPromemoriaSeTerminato() async {
   }
 
   Future<void> programmaPromemoria(String frequenza) async {
-  print('programmaPromemoria chiamato con frequenza: $frequenza');
 
   final durata = durataDaFrequenza(frequenza);
-  print('Durata calcolata: $durata');
 
   if (durata == null) {
-    print('Durata null, esco');
+    
     return;
   }
 
   final totaleNotifiche = await AppStorage.loadNotificationQueue();
-  print('Totale notifiche caricate: $totaleNotifiche');
 
   if (totaleNotifiche == null || totaleNotifiche <= 0) {
-    print('Totale notifiche non valido, esco');
+    
     return;
   }
 
@@ -169,67 +166,57 @@ Future<bool> resettaPromemoriaSeTerminato() async {
 //-----------------------------------
 final permessoOk = await _assicuratiPermessoExactAlarm();
 if (!permessoOk) {
-  print('Permesso exact alarm non concesso');
   return;
 }
 //-----------------------------------
-  print('Lingua attiva notifiche: $_linguaAttiva');
-
   _promemoriaAttivo = true;
   _durataAttiva = durata;
   _totaleNotifiche = totaleNotifiche;
   _ultimaFrase = null;
 
   final finePromemoria = DateTime.now().add(durata * totaleNotifiche);
-  print('Fine promemoria prevista: $finePromemoria');
+
   await AppStorage.saveReminderEndAt(finePromemoria);
 
   await AppStorage.saveReminderActive(true);
 
   await _plugin.cancelAll();
-  print('Notifiche cancellate, avvio nuova programmazione');
 
   await _programmaSerieNotifiche();
 }
 
   Future<void> sincronizzaPromemoriaAllAvvio() async {
-print('sincronizzaPromemoriaAllAvvio chiamato');
 
     await init();
 
     final attivo = await AppStorage.loadReminderActive();
-print('Reminder attivo: $attivo');
 
     if (!attivo) return;
 
     final frequenza = await AppStorage.loadFrequency();
-print('Frequenza salvata: $frequenza');
 
     final durata = frequenza != null ? durataDaFrequenza(frequenza) : null;
-print('Durata calcolata: $durata');
 
     if (durata == null) return;
 
     final totaleNotifiche = await AppStorage.loadNotificationQueue();
-print('Totale notifiche salvate: $totaleNotifiche');
 
     if (totaleNotifiche == null || totaleNotifiche <= 0) return;
 
     await _caricaLinguaAttiva();
-print('Lingua attiva all’avvio: $_linguaAttiva');
 
     _promemoriaAttivo = true;
     _durataAttiva = durata;
     _totaleNotifiche = totaleNotifiche;
 
     final pending = await _plugin.pendingNotificationRequests();
-    print('Notifiche pending trovate: ${pending.length}');
+    
 //-------------------------------
 final permessoOk = await _assicuratiPermessoExactAlarm();
 if (!permessoOk) return;
 //-------------------------------
     if (pending.isEmpty) {
-      print('Nessuna notifica pending, riprogrammo tutto');
+      
       await _programmaSerieNotifiche();
     }
   }
@@ -261,20 +248,15 @@ if (!permessoOk) return;
 
 
   Future<void> _programmaSerieNotifiche() async {
-print('_programmaSerieNotifiche chiamato');
-  print('Attivo: $_promemoriaAttivo');
-  print('Durata: $_durataAttiva');
-  print('Totale notifiche: $_totaleNotifiche');
 
     if (!_promemoriaAttivo ||
         _durataAttiva == null ||
         _totaleNotifiche == null) {
-          print('Condizioni non valide, esco');
+         
       return;
     }
 
     final oraInizio = tz.TZDateTime.now(tz.local);
-print('Ora inizio: $oraInizio');
 
     for (int i = 1; i <= _totaleNotifiche!; i++) {
       final scheduledDate = oraInizio.add(_durataAttiva! * i);
@@ -293,11 +275,6 @@ print('Ora inizio: $oraInizio');
             : isUltima
                 ? titoloReimpostaFrequenza(_linguaAttiva)
                 : null;
-
-          print('Programmo notifica $i su $_totaleNotifiche');
-          print('Data schedulata: $scheduledDate');
-          print('Testo: $body');
-          print('Titolo: $title');
           
       await _plugin.zonedSchedule(
         id: i,
@@ -319,11 +296,11 @@ print('Ora inizio: $oraInizio');
         payload: _payloadPromemoria,
       );
     }
-    print('Fine programmazione notifiche');
+    
   }
 
   Future<void> cancellaPromemoria() async {
-print('cancellaPromemoria chiamato');
+
 
     _promemoriaAttivo = false;
     _durataAttiva = null;
@@ -332,6 +309,6 @@ print('cancellaPromemoria chiamato');
 
     await AppStorage.saveReminderActive(false);
     await _plugin.cancelAll();
-    print('Tutte le notifiche cancellate');
+    
   }
 }

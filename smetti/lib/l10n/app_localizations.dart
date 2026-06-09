@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'Orange'**
   String get gradientOrange;
 
+  /// No description provided for @gradientYellow.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow'**
+  String get gradientYellow;
+
   /// No description provided for @gradientGray.
   ///
   /// In en, this message translates to:

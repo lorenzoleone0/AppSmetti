@@ -163,6 +163,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get gradientOrange => 'Orange';
 
   @override
+  String get gradientYellow => 'Gelb';
+
+  @override
   String get gradientGray => 'Grau';
 
   @override

@@ -17,6 +17,7 @@ const List<SfumaturaOpzione> opzioniSfumatura = [
   SfumaturaOpzione(id: 'verde', colore: Color.fromARGB(255, 1, 87, 42)),
   SfumaturaOpzione(id: 'viola', colore: Color.fromARGB(255, 62, 1, 87)),
   SfumaturaOpzione(id: 'arancione', colore: Color.fromARGB(255, 87, 45, 1)),
+  SfumaturaOpzione(id: 'giallo', colore: Color.fromARGB(255, 87, 87, 1)),
   SfumaturaOpzione(id: 'grigio', colore: Color.fromARGB(255, 87, 87, 87)),
 ];
 
@@ -32,6 +33,8 @@ String labelSfumatura(AppLocalizations l10n, String id) {
       return l10n.gradientPurple;
     case 'arancione':
       return l10n.gradientOrange;
+    case 'giallo':
+      return l10n.gradientYellow;
     case 'grigio':
       return l10n.gradientGray;
     default:

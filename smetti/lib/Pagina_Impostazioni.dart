@@ -46,8 +46,7 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
     }
   }
 
-  static const String _androidPackageName =
-      'com.lil.smetti'; 
+  static const String _androidPackageName = 'com.lil.smetti';
 
   Future<void> _apriExactAlarmSettings() async {
     final l10n = AppLocalizations.of(context)!;
@@ -201,250 +200,281 @@ class _PaginaImpostazioniState extends State<PaginaImpostazioni> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.changeGradientTitle,
-              style: const TextStyle(
-                fontFamily: 'Exo',
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.15)),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: opzioneAttuale?.id,
-                  isExpanded: true,
-                  dropdownColor: Colors.grey.shade900,
-                  iconEnabledColor: Colors.white,
-                  style: const TextStyle(
-                    fontFamily: 'Exo',
-                    fontWeight: FontWeight.w600,
-                  ),
-                  onChanged: (String? nuovoValore) {
-                    if (nuovoValore == null) return;
-
-                    final SfumaturaOpzione opzioneSelezionata = widget
-                        .opzioniSfumatura
-                        .firstWhere((opzione) => opzione.id == nuovoValore);
-
-                    widget.onColoreChanged(opzioneSelezionata.colore);
-                    Navigator.pop(context);
-                  },
-                  items: widget.opzioniSfumatura
-                      .map(
-                        (opzione) => DropdownMenuItem<String>(
-                          value: opzione.id,
-                          child: Text(labelSfumatura(l10n, opzione.id)),
-                        ),
-                      )
-                      .toList(),
+      /* body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0), */
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(
+            24.0,
+            24.0,
+            24.0,
+            24.0 + MediaQuery.of(context).padding.bottom,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.changeGradientTitle,
+                style: const TextStyle(
+                  fontFamily: 'Exo',
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-            const SizedBox(height: 28),
-            Text(
-              l10n.languageTitle,
-              style: const TextStyle(
-                fontFamily: 'Exo',
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.15)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: opzioneAttuale?.id,
+                    isExpanded: true,
+                    dropdownColor: Colors.grey.shade900,
+                    iconEnabledColor: Colors.white,
+                    style: const TextStyle(
+                      fontFamily: 'Exo',
+                      fontWeight: FontWeight.w600,
+                    ),
+                    onChanged: (String? nuovoValore) {
+                      if (nuovoValore == null) return;
+
+                      final SfumaturaOpzione opzioneSelezionata = widget
+                          .opzioniSfumatura
+                          .firstWhere((opzione) => opzione.id == nuovoValore);
+
+                      widget.onColoreChanged(opzioneSelezionata.colore);
+                      Navigator.pop(context);
+                    },
+                    items: widget.opzioniSfumatura
+                        .map(
+                          (opzione) => DropdownMenuItem<String>(
+                            value: opzione.id,
+                            child: Text(labelSfumatura(l10n, opzione.id)),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.15)),
+              const SizedBox(height: 28),
+              Text(
+                l10n.languageTitle,
+                style: const TextStyle(
+                  fontFamily: 'Exo',
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: _linguaLocale,
-                  isExpanded: true,
-                  dropdownColor: Colors.grey.shade900,
-                  iconEnabledColor: Colors.white,
-                  hint: Text(
-                    l10n.selectLanguageHint,
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.15)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _linguaLocale,
+                    isExpanded: true,
+                    dropdownColor: Colors.grey.shade900,
+                    iconEnabledColor: Colors.white,
+                    hint: Text(
+                      l10n.selectLanguageHint,
+                      style: const TextStyle(
+                        fontFamily: 'Exo',
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: const TextStyle(
+                      fontFamily: 'Exo',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    onChanged: (String? nuovoValore) async {
+                      if (nuovoValore == null) return;
+
+                      setState(() {
+                        _linguaLocale = nuovoValore;
+                      });
+
+                      await widget.onLinguaChanged(nuovoValore);
+                    },
+                    items: lingue
+                        .map(
+                          (lingua) => DropdownMenuItem<String>(
+                            value: lingua.key,
+                            child: Text(lingua.value),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              Text(
+                l10n.savingsSectionTitle,
+                style: const TextStyle(
+                  fontFamily: 'Exo',
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.15)),
+                ),
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.savings_outlined,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    l10n.savingsTileTitle,
+                    style: const TextStyle(
+                      fontFamily: 'Exo',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text(
+                    l10n.savingsTileSubtitle,
                     style: const TextStyle(
                       fontFamily: 'Exo',
                       color: Colors.white70,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  style: const TextStyle(
-                    fontFamily: 'Exo',
+                  trailing: const Icon(
+                    Icons.chevron_right,
                     color: Colors.white,
-                    fontWeight: FontWeight.w600,
                   ),
-                  onChanged: (String? nuovoValore) async {
-                    if (nuovoValore == null) return;
+                  onTap: () async {
+                    final changed = await Navigator.of(context).push<bool>(
+                      MaterialPageRoute(
+                        builder: (_) => const PaginaRisparmio(),
+                      ),
+                    );
 
-                    setState(() {
-                      _linguaLocale = nuovoValore;
-                    });
-
-                    await widget.onLinguaChanged(nuovoValore);
+                    if (changed == true && context.mounted) {
+                      Navigator.pop(context, true);
+                    }
                   },
-                  items: lingue
-                      .map(
-                        (lingua) => DropdownMenuItem<String>(
-                          value: lingua.key,
-                          child: Text(lingua.value),
-                        ),
-                      )
-                      .toList(),
                 ),
               ),
-            ),
-            const SizedBox(height: 28),
-            Text(
-              l10n.savingsSectionTitle,
-              style: const TextStyle(
-                fontFamily: 'Exo',
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.15)),
-              ),
-              child: ListTile(
-                leading: const Icon(
-                  Icons.savings_outlined,
+              const SizedBox(height: 28),
+              Text(
+                l10n.optimizationSectionTitle,
+                style: const TextStyle(
+                  fontFamily: 'Exo',
                   color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
                 ),
-                title: Text(
-                  l10n.savingsTileTitle,
-                  style: const TextStyle(
-                    fontFamily: 'Exo',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                subtitle: Text(
-                  l10n.savingsTileSubtitle,
-                  style: const TextStyle(
-                    fontFamily: 'Exo',
-                    color: Colors.white70,
-                  ),
-                ),
-                trailing: const Icon(Icons.chevron_right, color: Colors.white),
-                onTap: () async {
-                  final changed = await Navigator.of(context).push<bool>(
-                    MaterialPageRoute(builder: (_) => const PaginaRisparmio()),
-                  );
-
-                  if (changed == true && context.mounted) {
-                    Navigator.pop(context, true);
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 28),
-            Text(
-              l10n.optimizationSectionTitle,
-              style: const TextStyle(
-                fontFamily: 'Exo',
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (defaultTargetPlatform == TargetPlatform.android) ...[
-              _buildSettingTile(
-                icon: Icons.alarm_on_rounded,
-                subtitle: l10n.exactAlarmSubtitle,
-                onTap: _apriExactAlarmSettings,
               ),
               const SizedBox(height: 12),
-              _buildSettingTile(
-                icon: Icons.battery_saver_outlined,
-                subtitle: l10n.batteryOptimizationSubtitle,
-                onTap: _apriBatteryOptimizationSettings,
+              if (defaultTargetPlatform == TargetPlatform.android) ...[
+                _buildSettingTile(
+                  icon: Icons.alarm_on_rounded,
+                  subtitle: l10n.exactAlarmSubtitle,
+                  onTap: _apriExactAlarmSettings,
+                ),
+                const SizedBox(height: 12),
+                _buildSettingTile(
+                  icon: Icons.battery_saver_outlined,
+                  subtitle: l10n.batteryOptimizationSubtitle,
+                  onTap: _apriBatteryOptimizationSettings,
+                ),
+              ] else ...[
+                _buildSettingTile(
+                  icon: Icons.settings_outlined,
+                  subtitle: 'Su iPhone puoi aprire le impostazioni dell’app.',
+                  onTap: _apriImpostazioniApp,
+                ),
+              ],
+              const SizedBox(height: 28),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.12)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      children: [
+                        _buildLegalLink(
+                          label: l10n.privacyPolicyTitle,
+                          onTap: () => _apriPaginaLegale(
+                            titolo: l10n.privacyPolicyTitle,
+                            assetPath: 'assets/legal/privacy.txt',
+                          ),
+                        ),
+                        _buildLegalLink(
+                          label: l10n.termsAndConditionsTitle,
+                          onTap: () => _apriPaginaLegale(
+                            titolo: l10n.termsAndConditionsTitle,
+                            assetPath: 'assets/legal/termini.txt',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ] else ...[
-              _buildSettingTile(
-                icon: Icons.settings_outlined,
-                subtitle: 'Su iPhone puoi aprire le impostazioni dell’app.',
-                onTap: _apriImpostazioniApp,
-              ),
+              //const SizedBox(height: 24),
             ],
-            const SizedBox(height: 28),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.06),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.12)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 8,
-                    children: [
-                      _buildLegalLink(
-                        label: l10n.privacyPolicyTitle,
-                        onTap: () => _apriPaginaLegale(
-                          titolo: l10n.privacyPolicyTitle,
-                          assetPath: 'assets/legal/privacy.txt',
-                        ),
-                      ),
-                      _buildLegalLink(
-                        label: l10n.termsAndConditionsTitle,
-                        onTap: () => _apriPaginaLegale(
-                          titolo: l10n.termsAndConditionsTitle,
-                          assetPath: 'assets/legal/termini.txt',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-class PaginaTestoLegale extends StatelessWidget {
+class PaginaTestoLegale extends StatefulWidget {
   const PaginaTestoLegale({
-    super.key,
     required this.titolo,
     required this.assetPath,
+    super.key,
   });
 
   final String titolo;
   final String assetPath;
 
+  @override
+  State<PaginaTestoLegale> createState() => _PaginaTestoLegaleState();
+}
+
+class _PaginaTestoLegaleState extends State<PaginaTestoLegale> {
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
+  }
+
   Future<String> _caricaTesto() async {
-    return rootBundle.loadString(assetPath);
+    return rootBundle.loadString(widget.assetPath);
   }
 
   @override
@@ -455,7 +485,7 @@ class PaginaTestoLegale extends StatelessWidget {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         title: Text(
-          titolo,
+          widget.titolo,
           style: const TextStyle(
             fontFamily: 'Exo',
             fontWeight: FontWeight.w600,
@@ -466,7 +496,9 @@ class PaginaTestoLegale extends StatelessWidget {
         future: _caricaTesto(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           if (snapshot.hasError) {
@@ -487,15 +519,17 @@ class PaginaTestoLegale extends StatelessWidget {
 
           final testo = snapshot.data ?? '';
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: SelectableText(
-              testo,
-              style: const TextStyle(
-                fontFamily: 'Exo',
-                color: Colors.white,
-                height: 1.45,
-                fontSize: 15,
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 32.0),
+              child: SelectableText(
+                testo,
+                style: const TextStyle(
+                  fontFamily: 'Exo',
+                  color: Colors.white,
+                  height: 1.45,
+                  fontSize: 15,
+                ),
               ),
             ),
           );
@@ -504,3 +538,4 @@ class PaginaTestoLegale extends StatelessWidget {
     );
   }
 }
+

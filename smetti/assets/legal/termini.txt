@@ -1,0 +1,82 @@
+Terms and Conditions of Use (EULA)
+
+Effective date: 01/06/2026
+
+These Terms and Conditions govern the use of the App, developed and operated by Lorenzo Leone (“Developer”).
+
+By downloading, installing, accessing, or using the App, you acknowledge that you have read, understood, and agreed to these Terms.
+
+1. Purpose of the App
+
+The App is designed solely to provide motivational, ironic, and personal support tools, reminders, and estimated savings calculations for users who wish to stop smoking.
+
+The App is not intended to encourage smoking, replace professional support, or serve as a medical device, diagnostic tool, or treatment.
+
+2. No Medical Advice
+
+All content provided by the App is for informational and motivational purposes only.
+
+The App does not constitute medical advice, diagnosis, treatment, therapy, emergency care, or a substitute for consultation with a physician, specialist, or other qualified healthcare professional.
+
+Users are solely responsible for any decisions made based on the content provided by the App.
+
+3. “As Is” and “As Available”
+
+The App is provided on an “as is” and “as available” basis.
+
+To the maximum extent permitted by applicable law, the Developer makes no representations or warranties of any kind, express or implied, regarding the App’s operation, availability, accuracy, reliability, or suitability for any particular purpose.
+
+The Developer does not guarantee that the App will help the user quit smoking, reduce smoking, or obtain any specific health or financial outcome.
+
+4. Notifications
+
+The App sends notifications based on the frequency selected by the user.
+
+The Developer is not responsible for notifications that are missed, delayed, blocked, or altered due to device settings, battery optimization, operating system restrictions, manufacturer restrictions, third-party software, or technical failures.
+
+Notification timing may vary depending on the device and system configuration.
+
+5. Savings Estimates
+
+Any savings values shown by the App are estimates only and are based on the information entered by the user.
+
+Such values are provided for informational and statistical purposes only and do not represent exact financial calculations, guarantees, or official currency conversions.
+
+6. User Responsibility and Data Loss
+
+The App stores data locally on the user’s device only.
+
+The Developer does not have access to that data and is not responsible for backing it up, restoring it, or preventing its loss.
+
+The user is solely responsible for maintaining any data stored within the App.
+
+The Developer shall not be liable for data loss caused by app uninstallation, device failure, operating system reset, corrupted storage, or any third-party software or service.
+
+7. Changes, Suspension, and Termination
+
+The Developer reserves the right, at any time and without prior notice, to modify, update, suspend, restrict, or discontinue any part of the App or its features.
+
+8. Intellectual Property
+
+All rights, title, and interest in and to the App, including its design, text, graphics, and software, remain the property of the Developer or its licensors.
+
+Users are granted a limited, non-exclusive, non-transferable, revocable license to use the App in accordance with these Terms.
+
+9. Limitation of Liability
+
+To the maximum extent permitted by applicable law, the Developer shall not be liable for any damages arising out of or in connection with the use of the App.
+
+This includes, without limitation, any loss of data, loss of profits, personal dissatisfaction, device issues, missed notifications, or any indirect or consequential damages.
+
+Nothing in these Terms excludes or limits liability that cannot be excluded under mandatory law.
+
+10. Governing Law
+
+These Terms shall be governed by and construed in accordance with Italian law.
+
+Any dispute arising out of or in connection with these Terms shall be subject to the competent court at the Developer’s place of residence, unless mandatory consumer protection rules provide otherwise.
+
+11. Contact
+
+For questions about these Terms and Conditions, contact:
+coniobase@gmail.com
