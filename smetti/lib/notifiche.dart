@@ -26,6 +26,7 @@ class ServizioNotifiche {
   Future<void> init() async {
     if (_inizializzato) return;
 
+    //const androidInit = AndroidInitializationSettings('ic_launcher');
     const androidInit = AndroidInitializationSettings('ic_notification');
     const darwinInit = DarwinInitializationSettings(
       requestAlertPermission: true,
